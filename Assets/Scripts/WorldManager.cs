@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class WorldManager : MonoBehaviour {
-
+public class WorldManager : MonoBehaviour
+{
 	public GameObject world1;
 	public GameObject world2;
 
@@ -12,13 +12,9 @@ public class WorldManager : MonoBehaviour {
 		world2.SetActive(!world2.activeSelf);
 	}
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+	{
 		if (Input.GetKeyDown(KeyCode.Tab))
 		{
 			FlipWorlds();
