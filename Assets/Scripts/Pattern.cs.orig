@@ -1,10 +1,14 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 public class Pattern : MonoBehaviour 
 {
 	public int size = 12;
+<<<<<<< HEAD
 	public bool[] patternSquare = new bool[4];
+=======
+    public bool[] patternSquare = new bool[4];
+>>>>>>> FETCH_HEAD
 
 	void Update ()
 	{

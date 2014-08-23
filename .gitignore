@@ -11,6 +11,8 @@
 /*.userprefs
 /*.pidb
 /*.booproj
+/*.orig
+/*.orig.meta
 UnityVS.DDRGame.sln.DotSettings
 Assets/UnityVS/Editor/SyntaxTree.VisualStudio.Unity.Bridge.dll
 Assets/UnityVS/Editor/SyntaxTree.VisualStudio.Unity.Bridge.dll.meta

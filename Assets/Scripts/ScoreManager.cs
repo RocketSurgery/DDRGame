@@ -20,6 +20,5 @@ public class ScoreManager : MonoBehaviour {
     public void AddScore()
     {
         score += scorePerTile;
-        Debug.Log("New Score " + score);
     }
 }
