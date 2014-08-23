@@ -3,9 +3,9 @@ using System.Collections;
 
 public class ChoreoTilePoints : MonoBehaviour {
 
-    GameObject scoreManagerObject;
-    ScoreManager scoreManagerComponent;
-    float threshhold = 0.2f;
+    public GameObject scoreManagerObject;
+    public ScoreManager scoreManagerComponent;
+    public float threshhold = 0.2f;
 
 	// Use this for initialization
 	void Start () {
