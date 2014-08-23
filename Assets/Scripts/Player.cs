@@ -16,7 +16,7 @@ public class Player : MonoBehaviour
 		moveVector = Vector2.up;
 	}
 
-	void FixedUpdate()
+	void Update()
 	{
 		Vector2 line1Start = (Vector2)(transform.position - model.right * hLineDistance);
 		Vector2 line1End = line1Start + (Vector2)model.up * vLineDistance;
