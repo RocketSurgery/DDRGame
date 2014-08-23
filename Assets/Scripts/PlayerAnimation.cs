@@ -11,8 +11,8 @@ public class PlayerAnimation : MonoBehaviour
 	[SerializeField] float animSpeed;
 	[SerializeField] float armAnimOffset; // this is to keep arm/legs from being exactly in sync
 
-	[SerializeField] float bodyAnimSpeed;
-	[SerializeField] float bodyAnimOffset;
+	[SerializeField] float bodyRotForce = 7.0f;
+	[SerializeField] float headMoveForce;
 
 	void Awake()
 	{
@@ -39,8 +39,12 @@ public class PlayerAnimation : MonoBehaviour
 		tempScale.y = -Mathf.Sin(count + armAnimOffset);
 		arms[1].transform.localScale = tempScale;
 
-//		Vector3 tempPos = body.transform.position;
-//		tempPos.x = Mathf.Sin(count) * bodyAnimSpeed;
-//		body.transform.position = tempPos;
+		Vector3 tempRot = body.transform.eulerAngles;
+		tempRot.z = transform.parent.eulerAngles.z + 90.0f + Mathf.Sin(count) * bodyRotForce;
+		body.transform.rotation = Quaternion.Euler(tempRot);
+
+		Vector3 tempPos = head.transform.localPosition;
+		tempPos.x = Mathf.Sin(count) * headMoveForce;
+		head.transform.localPosition = tempPos;
 	}
 }
