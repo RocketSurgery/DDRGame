@@ -19,7 +19,7 @@ public class OfficeRoom : MonoBehaviour
 				GameObject pickup = Instantiate(pickupObj) as GameObject;
 
 				Vector3 pickupPos = transform.position + new Vector3(-1.0f, 1.0f) * ((float)pattern.size)/2.0f;
-				pickupPos += new Vector3(i % pattern.size, -(int)i/pattern.size);
+                pickupPos += new Vector3(i % pattern.size + 0.5f, -(int)i / pattern.size + 0.5f);
 
 				pickup.transform.position = pickupPos;
 			}
