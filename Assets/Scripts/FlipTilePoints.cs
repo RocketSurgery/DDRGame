@@ -6,6 +6,8 @@ public class FlipTilePoints : JumpTilePoints
 	GameObject worldManagerObject;
 	WorldManager worldManagerScript;
 
+    float lastTimeFlipWorld = 0;
+
 	protected override void Start()
 	{
 		base.Start();
@@ -16,10 +18,11 @@ public class FlipTilePoints : JumpTilePoints
 
 	protected override void PlayerCollision()
 	{
-		if (JumpTypeFromInput() == jump)
+		if (JumpTypeFromInput() == jump && (Time.time - lastTimeFlipWorld) > 0.1f) // Make it so the world doesn't flip back immediately
 		{
 			worldManagerScript.FlipWorlds();
-			Destroy(gameObject);
+            lastTimeFlipWorld = Time.time;
+			//Destroy(gameObject);
 		}
 	}
 }
