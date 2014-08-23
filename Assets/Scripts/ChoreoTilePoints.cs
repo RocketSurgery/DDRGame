@@ -8,7 +8,7 @@ public class ChoreoTilePoints : MonoBehaviour {
     public float threshhold = 0.2f;
 
 	// Use this for initialization
-	void Start () {
+	protected void Start () {
         scoreManagerObject = GameObject.Find("ScoreManager");
         scoreManagerComponent = scoreManagerObject.GetComponent<ScoreManager>();
 	}
