@@ -1,14 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class FlipTilePoints : ChoreoTilePoints
+public class FlipTilePoints : JumpTilePoints
 {
-	public JumpTypes jump;
-
 	GameObject worldManagerObject;
 	WorldManager worldManagerScript;
 
-	new void Start()
+	public override void Start()
 	{
 		base.Start();
 
@@ -25,10 +23,5 @@ public class FlipTilePoints : ChoreoTilePoints
 			worldManagerScript.FlipWorlds();
 			Destroy(gameObject);
 		}
-	}
-
-	JumpTypes JumpTypeFromInput()
-	{
-		return JumpTypes.UP_DOWN;
 	}
 }

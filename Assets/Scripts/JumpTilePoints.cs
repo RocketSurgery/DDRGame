@@ -25,7 +25,7 @@ public class JumpTilePoints : ChoreoTilePoints
 		}
 	}
 
-	JumpTypes JumpTypeFromInput()
+	protected JumpTypes JumpTypeFromInput()
 	{
 		return JumpTypes.UP_DOWN;
 	}
