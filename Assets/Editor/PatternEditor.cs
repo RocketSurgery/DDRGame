@@ -2,56 +2,48 @@
 using System.Collections;
 using UnityEditor;
 
-[CustomEditor (typeof(Grid))]
+[CustomEditor (typeof(Pattern))]
 public class PatternEditor : Editor
 {
-	Vector3 mousePos;
-	Grid grid;
+	Pattern pattern;
 
 	void OnEnable()
 	{
-		grid = (Grid)target;
-		SceneView.onSceneGUIDelegate = GridUpdate;
-	}
-
-	void GridUpdate(SceneView sceneView)
-	{
-		Event e = Event.current;
-
-		if (e.isKey && e.character == 'p')
-		{
-			Debug.Log(mousePos);
-
-			GameObject obj;
-			Object prefab = PrefabUtility.GetPrefabParent(Selection.activeObject);
-		
-			if (prefab)
-			{
-				obj = PrefabUtility.InstantiatePrefab(prefab) as GameObject;
-				Vector3 aligned = new Vector3(Mathf.Floor(mousePos.x/grid.width)*grid.width + grid.width/2.0f,
-				                              Mathf.Floor(mousePos.y/grid.height)*grid.height + grid.height/2.0f, 0.0f);
-
-				obj.transform.position = mousePos;
-				SceneView.RepaintAll();
-			}
-		}
-
-		mousePos = Camera.current.ScreenToWorldPoint(new Vector3(e.mousePosition.x, -e.mousePosition.y + Camera.current.pixelHeight));
-
+		pattern = (Pattern)target;
 	}
 	
 	public override void OnInspectorGUI()
 	{
 		GUILayout.BeginHorizontal();
+		GUILayout.Label("Pattern Width/Height");
+		pattern.size = (int)GUILayout.HorizontalSlider(pattern.size, 4.0f, 15.0f, GUILayout.Width(120));
 
-		GUILayout.Label("Width");
-		grid.width = EditorGUILayout.FloatField(grid.width, GUILayout.Width(70));
-
-		GUILayout.Label("Height");
-		grid.height = EditorGUILayout.FloatField(grid.height, GUILayout.Width(70));
-
+		if(pattern.size * pattern.size != pattern.patternSquare.Length)
+		{
+			pattern.patternSquare = new bool[pattern.size * pattern.size];
+		}
 		GUILayout.EndHorizontal();
 
+		GUILayout.BeginHorizontal();
+		GUILayout.Label("Pattern Squares");
+		GUILayout.EndHorizontal();
+
+		GUILayout.BeginHorizontal();
+		if(GUILayout.Button("Clear"))
+		{
+			pattern.patternSquare = new bool[pattern.size * pattern.size];
+		}
+		GUILayout.EndHorizontal();
+
+		for(int i = 0; i < pattern.size; i++)
+		{
+			GUILayout.BeginHorizontal();
+			for(int j = 0; j < pattern.size; j++)
+			{
+				pattern.patternSquare[i * pattern.size + j] = GUILayout.Toggle(pattern.patternSquare[i * pattern.size + j], "", GUILayout.Width(13));
+			}
+			GUILayout.EndHorizontal();
+		}
 		SceneView.RepaintAll();
 	}
 }
