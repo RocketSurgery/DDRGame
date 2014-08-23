@@ -8,7 +8,8 @@ public enum JumpTypes
 	UP_LEFT,
 	LEFT_RIGHT,
 	DOWN_LEFT,
-	DOWN_RIGHT
+	DOWN_RIGHT,
+	NONE
 }
 
 public class JumpTilePoints : ChoreoTilePoints
@@ -25,8 +26,37 @@ public class JumpTilePoints : ChoreoTilePoints
 		}
 	}
 
-	JumpTypes JumpTypeFromInput()
+	protected JumpTypes JumpTypeFromInput()
 	{
-		return JumpTypes.UP_DOWN;
+		bool up = Input.GetKey(KeyCode.UpArrow);
+		bool down = Input.GetKey(KeyCode.DownArrow);
+		bool left = Input.GetKey(KeyCode.LeftArrow);
+		bool right = Input.GetKey(KeyCode.RightArrow);
+
+		if (up && down)
+		{
+			return JumpTypes.UP_DOWN;
+		}
+		else if (up && left)
+		{
+			return JumpTypes.UP_LEFT;
+		}
+		else if (up && right)
+		{
+			return JumpTypes.UP_RIGHT;
+		}
+		else if (left && right)
+		{
+			return JumpTypes.LEFT_RIGHT;
+		}
+		else if (down && left)
+		{
+			return JumpTypes.DOWN_LEFT;
+		}
+		else if (down && right)
+		{
+			return JumpTypes.DOWN_RIGHT;
+		}
+		return JumpTypes.NONE;
 	}
 }
