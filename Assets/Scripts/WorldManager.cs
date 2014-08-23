@@ -6,6 +6,12 @@ public class WorldManager : MonoBehaviour {
 	public GameObject world1;
 	public GameObject world2;
 
+	public void FlipWorlds()
+	{
+		world1.SetActive(!world1.activeSelf);
+		world2.SetActive(!world2.activeSelf);
+	}
+
 	// Use this for initialization
 	void Start () {
 	
@@ -15,8 +21,7 @@ public class WorldManager : MonoBehaviour {
 	void Update () {
 		if (Input.GetKeyDown(KeyCode.Tab))
 		{
-			world1.SetActive(!world1.activeSelf);
-			world2.SetActive(!world2.activeSelf);
+			FlipWorlds();
 		}
 	}
 }
