@@ -33,27 +33,27 @@ public class Player : MonoBehaviour
 		}
 	}
 
-	void Update()
-	{
-		if(Input.GetKeyDown(KeyCode.UpArrow))
-		{
-			moveVector = Vector2.up;
-			model.transform.rotation = Quaternion.Euler(Vector3.zero);
-		}
-		else if(Input.GetKeyDown(KeyCode.DownArrow))
-		{
-			moveVector = -Vector2.up;
-			model.transform.rotation = Quaternion.Euler(Vector3.forward * 180.0f);
-		}
-		else if(Input.GetKeyDown(KeyCode.LeftArrow))
-		{
-			moveVector = -Vector2.right;
-			model.transform.rotation = Quaternion.Euler(Vector3.forward * 90.0f);
-		}
-		else if(Input.GetKeyDown(KeyCode.RightArrow))
-		{
-			moveVector = Vector2.right;
-			model.transform.rotation = Quaternion.Euler(Vector3.forward * -90.0f);
-		}
-	}
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            moveVector = Vector2.up;
+            model.transform.rotation = Quaternion.Euler(Vector3.zero);
+        }
+        else if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            moveVector = -Vector2.up;
+            model.transform.rotation = Quaternion.Euler(Vector3.forward * 180.0f);
+        }
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            moveVector = -Vector2.right;
+            model.transform.rotation = Quaternion.Euler(Vector3.forward * 90.0f);
+        }
+        else if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            moveVector = Vector2.right;
+            model.transform.rotation = Quaternion.Euler(Vector3.forward * -90.0f);
+        }
+    }
 }
