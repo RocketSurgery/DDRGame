@@ -6,6 +6,7 @@ using UnityEditor;
 public class PatternEditor : Editor
 {
 	Pattern pattern;
+	float cubeSize = 3.0f;
 
 	void OnEnable()
 	{

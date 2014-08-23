@@ -80,6 +80,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 890ab4aa89db47d41808d8d22902fabb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scoreManagerObject: {fileID: 0}
+  scoreManagerComponent: {fileID: 0}
+  threshhold: .200000003
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
