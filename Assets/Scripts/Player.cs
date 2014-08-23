@@ -31,10 +31,7 @@ public class Player : MonoBehaviour
 		{
 			transform.position += (Vector3)moveVector * moveSpeed * Time.deltaTime;
 		}
-	}
 
-	void Update()
-	{
 		if(Input.GetKeyDown(KeyCode.UpArrow))
 		{
 			moveVector = Vector2.up;
