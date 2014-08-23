@@ -6,7 +6,7 @@ public class FlipTilePoints : JumpTilePoints
 	GameObject worldManagerObject;
 	WorldManager worldManagerScript;
 
-	public override void Start()
+	protected override void Start()
 	{
 		base.Start();
 
@@ -14,12 +14,10 @@ public class FlipTilePoints : JumpTilePoints
 		worldManagerScript = worldManagerObject.GetComponent<WorldManager>();
 	}
 
-	void OnTriggerStay2D(Collider2D collider)
+	protected override void PlayerCollision()
 	{
-		if ( (collider.gameObject.transform.position - gameObject.transform.position).magnitude < threshhold &&
-			JumpTypeFromInput() == jump )
+		if (JumpTypeFromInput() == jump)
 		{
-			scoreManagerComponent.AddScore();
 			worldManagerScript.FlipWorlds();
 			Destroy(gameObject);
 		}

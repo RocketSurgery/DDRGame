@@ -15,13 +15,20 @@ public enum JumpTypes
 public class JumpTilePoints : ChoreoTilePoints
 {
 	public JumpTypes jump;
+	SpriteRenderer sprite;
 
-	void OnTriggerStay2D(Collider2D collider)
+	new void Start()
 	{
-		if ( (collider.gameObject.transform.position - gameObject.transform.position).magnitude < threshhold &&
-			JumpTypeFromInput() == jump )
+		base.Start();
+
+		//sprite = gameObject.GetComponent<SpriteRenderer>();
+		//sprite.sprite = Resources.Load(jump.ToString(), typeof(Sprite)) as Sprite;
+	}
+
+	protected override void PlayerCollision()
+	{
+		if (JumpTypeFromInput() == jump)
 		{
-			scoreManagerComponent.AddScore();
 			Destroy(gameObject);
 		}
 	}
