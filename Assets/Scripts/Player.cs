@@ -6,6 +6,9 @@ public class Player : MonoBehaviour
 	[SerializeField] float moveSpeed;
 	[SerializeField] Transform model;
 
+	[SerializeField] float hLineDistance = 1.0f;
+	[SerializeField] float vLineDistance = 1.0f;
+
 	Vector2 moveVector;
 
 	void Awake()
@@ -15,11 +18,11 @@ public class Player : MonoBehaviour
 
 	void FixedUpdate()
 	{
-		Vector2 line1Start = (Vector2)(transform.position - model.right * 0.8f);
-		Vector2 line1End = line1Start + (Vector2)model.up;
+		Vector2 line1Start = (Vector2)(transform.position - model.right * hLineDistance);
+		Vector2 line1End = line1Start + (Vector2)model.up * vLineDistance;
 
-		Vector2 line2Start = (Vector2)(transform.position + model.right * 0.8f);
-		Vector2 line2End = line2Start + (Vector2)model.up;
+		Vector2 line2Start = (Vector2)(transform.position + model.right * hLineDistance);
+		Vector2 line2End = line2Start + (Vector2)model.up * vLineDistance;
 
 		Debug.DrawLine(line1Start, line1End);
 		Debug.DrawLine(line2Start, line2End);
@@ -28,26 +31,29 @@ public class Player : MonoBehaviour
 		{
 			transform.position += (Vector3)moveVector * moveSpeed * Time.deltaTime;
 		}
-
-		if(Input.GetKeyDown(KeyCode.W))
-		{
-			moveVector = Vector2.up;
-			model.transform.rotation = Quaternion.Euler(Vector3.zero);
-		}
-		else if(Input.GetKeyDown(KeyCode.S))
-		{
-			moveVector = -Vector2.up;
-			model.transform.rotation = Quaternion.Euler(Vector3.forward * 180.0f);
-		}
-		else if(Input.GetKeyDown(KeyCode.A))
-		{
-			moveVector = -Vector2.right;
-			model.transform.rotation = Quaternion.Euler(Vector3.forward * 90.0f);
-		}
-		else if(Input.GetKeyDown(KeyCode.D))
-		{
-			moveVector = Vector2.right;
-			model.transform.rotation = Quaternion.Euler(Vector3.forward * -90.0f);
-		}
 	}
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            moveVector = Vector2.up;
+            model.transform.rotation = Quaternion.Euler(Vector3.zero);
+        }
+        else if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            moveVector = -Vector2.up;
+            model.transform.rotation = Quaternion.Euler(Vector3.forward * 180.0f);
+        }
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            moveVector = -Vector2.right;
+            model.transform.rotation = Quaternion.Euler(Vector3.forward * 90.0f);
+        }
+        else if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            moveVector = Vector2.right;
+            model.transform.rotation = Quaternion.Euler(Vector3.forward * -90.0f);
+        }
+    }
 }
