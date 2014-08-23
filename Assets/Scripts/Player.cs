@@ -5,7 +5,7 @@ public class Player : MonoBehaviour
 {
 	[SerializeField] float moveSpeed;
 
-	[SerializeField] float hLineDistance = 1.0f;
+	[SerializeField] float hLineDistance = 0.2f;
 	[SerializeField] float vLineDistance = 1.0f;
 
 	Vector2 moveVector;
@@ -26,10 +26,10 @@ public class Player : MonoBehaviour
 		Debug.DrawLine(line1Start, line1End);
 		Debug.DrawLine(line2Start, line2End);
 
-		if(!(Physics2D.Linecast(line1Start, line1End) || Physics2D.Linecast(line2Start, line2End)))
-		{
-			transform.position += (Vector3)moveVector * moveSpeed * Time.deltaTime;
-		}
+        if (!(Physics2D.Linecast(line1Start, line1End) || Physics2D.Linecast(line2Start, line2End)))
+        {
+            transform.position += (Vector3)moveVector * moveSpeed * Time.deltaTime;
+        }
 	}
 
     public float distanceToNearestPosition;
