@@ -1,18 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Player : MonoBehaviour 
 {
-	[SerializeField] float moveSpeed;
+	[SerializeField] float moveSpeed = 10.0f;
 
 	[SerializeField] float hLineDistance = 1.0f;
 	[SerializeField] float vLineDistance = 1.0f;
 
 	Vector2 moveVector;
+	List<KeyCode> pendingInput;
+	float timeInterval;
 
-	void Awake()
+	void Start()
 	{
+		timeInterval = 1.0f / moveSpeed;
+
 		moveVector = Vector2.up;
+		pendingInput = new List<KeyCode>();
+
+		StartCoroutine("PerformMovement");
 	}
 
 	void FixedUpdate()
@@ -28,7 +36,7 @@ public class Player : MonoBehaviour
 
 		if(!(Physics2D.Linecast(line1Start, line1End) || Physics2D.Linecast(line2Start, line2End)))
 		{
-			transform.position += (Vector3)moveVector * moveSpeed * Time.deltaTime;
+			transform.position += (Vector3)moveVector * moveSpeed * Time.fixedDeltaTime;
 		}
 	}
 
@@ -36,23 +44,51 @@ public class Player : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            moveVector = Vector2.up;
-            transform.transform.rotation = Quaternion.Euler(Vector3.zero);
+			pendingInput.Add(KeyCode.UpArrow);
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            moveVector = -Vector2.up;
-            transform.transform.rotation = Quaternion.Euler(Vector3.forward * 180.0f);
+			pendingInput.Add(KeyCode.DownArrow);
         }
         else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            moveVector = -Vector2.right;
-            transform.transform.rotation = Quaternion.Euler(Vector3.forward * 90.0f);
+			pendingInput.Add(KeyCode.LeftArrow);
         }
         else if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            moveVector = Vector2.right;
-            transform.transform.rotation = Quaternion.Euler(Vector3.forward * -90.0f);
+			pendingInput.Add(KeyCode.RightArrow);
         }
     }
+
+	IEnumerator PerformMovement()
+	{
+		while (true)
+		{
+			if (pendingInput.Count == 1)
+			{
+				switch (pendingInput[0])
+				{
+				case KeyCode.UpArrow:
+					moveVector = Vector2.up;
+					transform.transform.rotation = Quaternion.Euler(Vector3.zero);
+					break;
+				case KeyCode.DownArrow:
+					moveVector = -Vector2.up;
+					transform.transform.rotation = Quaternion.Euler(Vector3.forward * 180.0f);
+					break;
+				case KeyCode.LeftArrow:
+					moveVector = -Vector2.right;
+					transform.transform.rotation = Quaternion.Euler(Vector3.forward * 90.0f);
+					break;
+				case KeyCode.RightArrow:
+					moveVector = Vector2.right;
+					transform.transform.rotation = Quaternion.Euler(Vector3.forward * -90.0f);
+					break;
+				}
+			}
+
+			pendingInput.Clear();
+			yield return new WaitForSeconds(timeInterval);
+		}
+	}
 }
