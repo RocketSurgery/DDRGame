@@ -11226,8 +11226,8 @@ MonoBehaviour:
   head: {fileID: 1792031492}
   animSpeed: 3
   armAnimOffset: .400000006
-  bodyAnimSpeed: .400000006
-  bodyAnimOffset: .300000012
+  bodyRotForce: 7
+  headMoveForce: 0
 --- !u!1 &233737189
 GameObject:
   m_ObjectHideFlags: 0
@@ -67887,8 +67887,8 @@ MonoBehaviour:
   head: {fileID: 352049141}
   animSpeed: 3
   armAnimOffset: .400000006
-  bodyAnimSpeed: .400000006
-  bodyAnimOffset: .300000012
+  bodyRotForce: 7
+  headMoveForce: 0
 --- !u!1 &1401729592
 GameObject:
   m_ObjectHideFlags: 0
