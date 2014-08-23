@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class Player : MonoBehaviour 
 {
@@ -10,9 +10,17 @@ public class Player : MonoBehaviour
 
 	Vector2 moveVector;
 
+	public float distanceToNearestPosition;
+	public Vector3 nearestPosition;
+	public Vector3 debugPos;
+
+	List<KeyCode> keyPresses;
+	public float inputDelay = 0.05f;
+
 	void Awake()
 	{
 		moveVector = Vector2.up;
+		keyPresses = new List<KeyCode>();
 	}
 
 	void FixedUpdate()
@@ -32,44 +40,63 @@ public class Player : MonoBehaviour
         }
 	}
 
-    public float distanceToNearestPosition;
-    public Vector3 nearestPosition;
-    public Vector3 debugPos;
+	void Update()
+	{
+		bool up = Input.GetKeyDown(KeyCode.UpArrow);
+		bool down = Input.GetKeyDown(KeyCode.DownArrow);
+		bool left = Input.GetKeyDown(KeyCode.LeftArrow);
+		bool right = Input.GetKeyDown(KeyCode.RightArrow);
 
-    void Update()
-    {
-        debugPos = transform.position;
-        nearestPosition = new Vector3( Mathf.RoundToInt(transform.position.x),Mathf.RoundToInt(transform.position.y), 0);
+		if ((up || down || left || right) && keyPresses.Count == 0)
+		{
+			Invoke("Move", inputDelay);
+		}
 
-        distanceToNearestPosition = Vector3.Project(transform.position - nearestPosition, moveVector).magnitude;
+		if (up) keyPresses.Add(KeyCode.UpArrow);
+		if (down) keyPresses.Add(KeyCode.DownArrow);
+		if (left) keyPresses.Add(KeyCode.LeftArrow);
+		if (right) keyPresses.Add(KeyCode.RightArrow);
+	}
 
-        if (Input.GetKeyDown(KeyCode.UpArrow) && moveVector != Vector2.up )
-        {            
-            moveVector = Vector2.up;
-            transform.transform.rotation = Quaternion.Euler(Vector3.zero);
-            Vector3 moveVector3 = new Vector3(moveVector.x, moveVector.y, 0);
-            transform.position = nearestPosition + distanceToNearestPosition * moveVector3;
-        }
-        else if (Input.GetKeyDown(KeyCode.DownArrow) && moveVector != -Vector2.up)
-        {
-            moveVector = -Vector2.up;
-            transform.transform.rotation = Quaternion.Euler(Vector3.forward * 180.0f);
-            Vector3 moveVector3 = new Vector3(moveVector.x, moveVector.y, 0);
-            transform.position = nearestPosition + distanceToNearestPosition * moveVector3;
-        }
-        else if (Input.GetKeyDown(KeyCode.LeftArrow) && moveVector != -Vector2.right)
-        {
-            moveVector = -Vector2.right;
-            transform.transform.rotation = Quaternion.Euler(Vector3.forward * 90.0f);
-            Vector3 moveVector3 = new Vector3(moveVector.x, moveVector.y, 0);
-            transform.position = nearestPosition + distanceToNearestPosition * moveVector3;
-        }
-        else if (Input.GetKeyDown(KeyCode.RightArrow) && moveVector != Vector2.right)
-        {
-            moveVector = Vector2.right;
-            transform.transform.rotation = Quaternion.Euler(Vector3.forward * -90.0f);
-            Vector3 moveVector3 = new Vector3(moveVector.x, moveVector.y, 0);
-            transform.position = nearestPosition + distanceToNearestPosition * moveVector3;
-        }
-    }
+	void Move()
+	{
+		nearestPosition = new Vector3(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y), 0);
+		distanceToNearestPosition = Vector3.Project(transform.position - nearestPosition, moveVector).magnitude;
+
+		// only turn if a single input was detected
+		if (keyPresses.Count == 1)
+		{
+			if (keyPresses[0] == KeyCode.UpArrow && moveVector != Vector2.up)
+			{
+				moveVector = Vector2.up;
+				transform.transform.rotation = Quaternion.Euler(Vector3.zero);
+				Vector3 moveVector3 = new Vector3(moveVector.x, moveVector.y, 0);
+				transform.position = nearestPosition + distanceToNearestPosition * moveVector3;
+			}
+			else if (keyPresses[0] == KeyCode.DownArrow && moveVector != -Vector2.up)
+			{
+				moveVector = -Vector2.up;
+				transform.transform.rotation = Quaternion.Euler(Vector3.forward * 180.0f);
+				Vector3 moveVector3 = new Vector3(moveVector.x, moveVector.y, 0);
+				transform.position = nearestPosition + distanceToNearestPosition * moveVector3;
+			}
+			else if (keyPresses[0] == KeyCode.LeftArrow && moveVector != -Vector2.right)
+			{
+				moveVector = -Vector2.right;
+				transform.transform.rotation = Quaternion.Euler(Vector3.forward * 90.0f);
+				Vector3 moveVector3 = new Vector3(moveVector.x, moveVector.y, 0);
+				transform.position = nearestPosition + distanceToNearestPosition * moveVector3;
+			}
+			else if (keyPresses[0] == KeyCode.RightArrow && moveVector != Vector2.right)
+			{
+				moveVector = Vector2.right;
+				transform.transform.rotation = Quaternion.Euler(Vector3.forward * -90.0f);
+				Vector3 moveVector3 = new Vector3(moveVector.x, moveVector.y, 0);
+				transform.position = nearestPosition + distanceToNearestPosition * moveVector3;
+			}
+		}
+
+		// empty input queue
+		keyPresses.Clear();
+	}
 }
