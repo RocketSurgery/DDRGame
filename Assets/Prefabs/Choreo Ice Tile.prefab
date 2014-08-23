@@ -12,7 +12,7 @@ GameObject:
   - 23: {fileID: 2300000}
   - 114: {fileID: 11400000}
   - 61: {fileID: 6100000}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Choreo Ice Tile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26,7 +26,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: -.707107008, w: .70710665}
-  m_LocalPosition: {x: 0, y: 2.92070007, z: -.100000001}
+  m_LocalPosition: {x: 2, y: 3, z: -.100000001}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -66,7 +66,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Size: {x: 1, y: 1}
   m_Center: {x: 0, y: 0}
 --- !u!114 &11400000
@@ -80,7 +80,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 890ab4aa89db47d41808d8d22902fabb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scoreManagerObject: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

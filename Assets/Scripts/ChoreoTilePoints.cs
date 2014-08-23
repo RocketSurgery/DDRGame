@@ -3,11 +3,12 @@ using System.Collections;
 
 public class ChoreoTilePoints : MonoBehaviour {
 
-    public GameObject scoreManagerObject;
+    GameObject scoreManagerObject;
     ScoreManager scoreManagerComponent;
 
 	// Use this for initialization
 	void Start () {
+        scoreManagerObject = GameObject.Find("ScoreManager");
         scoreManagerComponent = scoreManagerObject.GetComponent<ScoreManager>();
 	}
 	
@@ -16,7 +17,7 @@ public class ChoreoTilePoints : MonoBehaviour {
 	    
 	}
 
-    void OnCollisionEnter2D(Collision2D collider)
+    void OnTriggerEnter2D(Collider2D collider)
     {
         scoreManagerComponent.AddScore();
         Destroy(gameObject);
