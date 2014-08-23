@@ -4,12 +4,10 @@ using System.Collections;
 public class ChoreoTilePoints : MonoBehaviour {
 
     public GameObject scoreManagerObject;
-    public ScoreManager scoreManagerComponent;
-    public float threshhold = 0.2f;
+    ScoreManager scoreManagerComponent;
 
 	// Use this for initialization
-	public virtual void Start () {
-        scoreManagerObject = GameObject.Find("ScoreManager");
+	void Start () {
         scoreManagerComponent = scoreManagerObject.GetComponent<ScoreManager>();
 	}
 	
@@ -18,12 +16,9 @@ public class ChoreoTilePoints : MonoBehaviour {
 	    
 	}
 
-    void OnTriggerStay2D(Collider2D collider)
+    void OnCollisionEnter2D(Collision2D collider)
     {
-        if ( (collider.gameObject.transform.position - gameObject.transform.position).magnitude < threshhold )
-        {
-            scoreManagerComponent.AddScore();
-            Destroy(gameObject);
-        }
+        scoreManagerComponent.AddScore();
+        Destroy(gameObject);
     }
 }
