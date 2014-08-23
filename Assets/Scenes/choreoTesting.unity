@@ -9210,6 +9210,10 @@ MonoBehaviour:
   moveSpeed: 5
   hLineDistance: .449999988
   vLineDistance: .600000024
+  distanceToNearestPosition: 0
+  nearestPosition: {x: 0, y: 0, z: 0}
+  debugPos: {x: 0, y: 0, z: 0}
+  inputDelay: .0500000007
 --- !u!50 &200629611
 Rigidbody2D:
   m_ObjectHideFlags: 0
@@ -99329,6 +99333,10 @@ Prefab:
     - target: {fileID: 400014, guid: f62c9a2d6e9744936b98b5f771d9153c, type: 2}
       propertyPath: m_RootOrder
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 11400000, guid: f62c9a2d6e9744936b98b5f771d9153c, type: 2}
+      propertyPath: inputDelay
+      value: .0500000007
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f62c9a2d6e9744936b98b5f771d9153c, type: 2}
