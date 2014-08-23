@@ -16,7 +16,7 @@ public class Player : MonoBehaviour
 		moveVector = Vector2.up;
 	}
 
-	void Update()
+	void FixedUpdate()
 	{
 		Vector2 line1Start = (Vector2)(transform.position - model.right * hLineDistance);
 		Vector2 line1End = line1Start + (Vector2)model.up * vLineDistance;
@@ -31,26 +31,29 @@ public class Player : MonoBehaviour
 		{
 			transform.position += (Vector3)moveVector * moveSpeed * Time.deltaTime;
 		}
-
-		if(Input.GetKeyDown(KeyCode.UpArrow))
-		{
-			moveVector = Vector2.up;
-			model.transform.rotation = Quaternion.Euler(Vector3.zero);
-		}
-		else if(Input.GetKeyDown(KeyCode.DownArrow))
-		{
-			moveVector = -Vector2.up;
-			model.transform.rotation = Quaternion.Euler(Vector3.forward * 180.0f);
-		}
-		else if(Input.GetKeyDown(KeyCode.LeftArrow))
-		{
-			moveVector = -Vector2.right;
-			model.transform.rotation = Quaternion.Euler(Vector3.forward * 90.0f);
-		}
-		else if(Input.GetKeyDown(KeyCode.RightArrow))
-		{
-			moveVector = Vector2.right;
-			model.transform.rotation = Quaternion.Euler(Vector3.forward * -90.0f);
-		}
 	}
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            moveVector = Vector2.up;
+            model.transform.rotation = Quaternion.Euler(Vector3.zero);
+        }
+        else if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            moveVector = -Vector2.up;
+            model.transform.rotation = Quaternion.Euler(Vector3.forward * 180.0f);
+        }
+        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            moveVector = -Vector2.right;
+            model.transform.rotation = Quaternion.Euler(Vector3.forward * 90.0f);
+        }
+        else if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            moveVector = Vector2.right;
+            model.transform.rotation = Quaternion.Euler(Vector3.forward * -90.0f);
+        }
+    }
 }
