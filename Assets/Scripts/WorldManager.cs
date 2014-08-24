@@ -7,19 +7,50 @@ public class WorldManager : MonoBehaviour
 	public GameObject world2;
 	public GameObject playerModel1;
 	public GameObject playerModel2;
-    public GameObject flipTiles;
+    
+    GameObject[] flipTiles;
+    GameObject[] governmentItems;
+    GameObject[] internetItems;
+
+    void Start()
+    {
+        flipTiles = GameObject.FindGameObjectsWithTag("FlipTile");
+        governmentItems = GameObject.FindGameObjectsWithTag("GovernmentStuff");
+        internetItems = GameObject.FindGameObjectsWithTag("InternetStuff");
+
+        foreach (GameObject go in governmentItems)
+        {
+            go.SetActive(false);
+        }
+    }
 
 	public void FlipWorlds()
 	{
-		world1.SetActive(!world1.activeSelf);
-		world2.SetActive(!world2.activeSelf);
+		//world1.SetActive(!world1.activeSelf);
+		//world2.SetActive(!world2.activeSelf);
+
+        foreach (GameObject go in internetItems)
+        {
+            if (go != null)
+            {
+                go.SetActive(!go.activeSelf);
+            }
+        }
+
+        foreach (GameObject go in governmentItems)
+        {
+            if (go != null)
+            {
+                go.SetActive(!go.activeSelf);
+            }
+        }
 
 		playerModel1.SetActive(!playerModel1.activeSelf);
 		playerModel2.SetActive(!playerModel2.activeSelf);
 
-        foreach ( Transform flipTile in flipTiles.GetComponentInChildren<Transform>() )
+        foreach ( GameObject flipTile in flipTiles )
         {
-            flipTile.Rotate(0, 0, 180);
+            flipTile.transform.Rotate(0, 0, 180);
             Debug.Log("Rotating");
         }
 	}
