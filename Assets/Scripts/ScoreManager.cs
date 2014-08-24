@@ -3,9 +3,9 @@ using System.Collections;
 
 public class ScoreManager : MonoBehaviour {
 
-    uint score = 0;
+    static uint score = 0;
 
-	public uint Score
+	public static uint Score
 	{
 		get
 		{

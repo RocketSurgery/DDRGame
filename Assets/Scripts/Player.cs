@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class Player : MonoBehaviour 
 {
-	[SerializeField] float moveSpeed;
+	[SerializeField] public float moveSpeed;
 
 	[SerializeField] float hLineDistance = 0.2f;
 	[SerializeField] float vLineDistance = 1.0f;

@@ -4,7 +4,6 @@ using System.Collections;
 
 public class ScoreText : MonoBehaviour
 {
-	ScoreManager scoreManager;
 	Text text;
 	string baseText;
 
@@ -12,11 +11,10 @@ public class ScoreText : MonoBehaviour
 	{
 		text = GetComponent<Text>();
 		baseText = text.text;
-		scoreManager = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
 	}
 
 	void Update ()
 	{
-		text.text = baseText + scoreManager.Score;
+		text.text = baseText + ScoreManager.Score;
 	}
 }
