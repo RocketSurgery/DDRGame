@@ -70,28 +70,28 @@ public class Player : MonoBehaviour
 			{
 				moveVector = Vector2.up;
 				transform.transform.rotation = Quaternion.Euler(Vector3.zero);
-				Vector3 moveVector3 = new Vector3(moveVector.x, moveVector.y, 0);
+				//Vector3 moveVector3 = new Vector3(moveVector.x, moveVector.y, 0);
                 transform.position = nearestPosition;// +distanceToNearestPosition * moveVector3;
 			}
 			else if (keyPresses[0] == KeyCode.DownArrow && moveVector != -Vector2.up)
 			{
 				moveVector = -Vector2.up;
 				transform.transform.rotation = Quaternion.Euler(Vector3.forward * 180.0f);
-				Vector3 moveVector3 = new Vector3(moveVector.x, moveVector.y, 0);
+				//Vector3 moveVector3 = new Vector3(moveVector.x, moveVector.y, 0);
                 transform.position = nearestPosition;// +distanceToNearestPosition * moveVector3;
 			}
 			else if (keyPresses[0] == KeyCode.LeftArrow && moveVector != -Vector2.right)
 			{
 				moveVector = -Vector2.right;
 				transform.transform.rotation = Quaternion.Euler(Vector3.forward * 90.0f);
-				Vector3 moveVector3 = new Vector3(moveVector.x, moveVector.y, 0);
+				//Vector3 moveVector3 = new Vector3(moveVector.x, moveVector.y, 0);
                 transform.position = nearestPosition;// +distanceToNearestPosition * moveVector3;
 			}
 			else if (keyPresses[0] == KeyCode.RightArrow && moveVector != Vector2.right)
 			{
 				moveVector = Vector2.right;
 				transform.transform.rotation = Quaternion.Euler(Vector3.forward * -90.0f);
-				Vector3 moveVector3 = new Vector3(moveVector.x, moveVector.y, 0);
+				//Vector3 moveVector3 = new Vector3(moveVector.x, moveVector.y, 0);
                 transform.position = nearestPosition;// +distanceToNearestPosition * moveVector3;
 			}
 		}

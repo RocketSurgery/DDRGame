@@ -67,7 +67,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: .200000003, y: .200000003}
   m_Center: {x: 0, y: 0}
 --- !u!114 &11400000
 MonoBehaviour:
@@ -80,8 +80,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 890ab4aa89db47d41808d8d22902fabb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scoreManagerObject: {fileID: 0}
-  scoreManagerComponent: {fileID: 0}
   threshhold: .200000003
 --- !u!1001 &100100000
 Prefab:

@@ -16,6 +16,16 @@ public class FlipTilePoints : JumpTilePoints
 		worldManagerScript = worldManagerObject.GetComponent<WorldManager>();
 	}
 
+    void OnTriggerStay2D(Collider2D collider)
+    {
+        if (JumpTypeFromInput() == jump && (Time.time - lastTimeFlipWorld) > 1.0f) // Make it so the world doesn't flip back immediately
+		{
+			worldManagerScript.FlipWorlds();
+            lastTimeFlipWorld = Time.time;
+			//Destroy(gameObject);
+		}
+    }
+
 	protected override void PlayerCollision()
 	{
 		if (JumpTypeFromInput() == jump && (Time.time - lastTimeFlipWorld) > 1.0f) // Make it so the world doesn't flip back immediately

@@ -5,7 +5,7 @@ public class ChoreoTilePoints : MonoBehaviour
 {
 	GameObject scoreManagerObject;
 	protected ScoreManager scoreManagerComponent;
-	public float threshhold = 0.2f;
+	public float threshhold = 0.1f;
 
 	// Use this for initialization
 	protected virtual void Start () {
@@ -15,10 +15,7 @@ public class ChoreoTilePoints : MonoBehaviour
 
 	void OnTriggerStay2D(Collider2D collider)
 	{
-		if ( ( (Vector2) collider.gameObject.transform.position - (Vector2) gameObject.transform.position).magnitude < threshhold )
-		{
-			PlayerCollision();
-		}
+		PlayerCollision();
 	}
 
 	protected virtual void PlayerCollision()

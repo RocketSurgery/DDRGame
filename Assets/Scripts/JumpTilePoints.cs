@@ -38,6 +38,7 @@ public class JumpTilePoints : ChoreoTilePoints
 		{
 			Destroy(gameObject);
 		}
+        Debug.Log("Player collision");
 	}
 
 	protected JumpTypes JumpTypeFromInput()
