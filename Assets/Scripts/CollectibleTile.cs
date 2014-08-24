@@ -8,6 +8,7 @@ public class CollectibleTile : JumpTilePoints
 		if (JumpTypeFromInput() == jump)
 		{
 			scoreManager.AddScore();
+			itemText.DisplayText("You have stolen some government secrets!");
 			Destroy(gameObject);
 		}
 	}
