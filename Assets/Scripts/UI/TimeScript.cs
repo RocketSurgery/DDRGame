@@ -17,6 +17,6 @@ public class TimeScript : MonoBehaviour
 
 	void Update()
 	{
-		text.text = baseText + timeManager.Time;
+		text.text = baseText + timeManager.Time.ToString("f2");
 	}
 }
