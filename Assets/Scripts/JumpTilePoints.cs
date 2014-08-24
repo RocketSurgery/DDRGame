@@ -40,6 +40,7 @@ public class JumpTilePoints : ChoreoTilePoints
 			timeManager.AddTime(timeBonus);
 			Destroy(gameObject);
 		}
+        Debug.Log("Player collision");
 	}
 
 	protected JumpTypes JumpTypeFromInput()

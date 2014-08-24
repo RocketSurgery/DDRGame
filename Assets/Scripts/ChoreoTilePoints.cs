@@ -3,7 +3,6 @@ using System.Collections;
 
 public class ChoreoTilePoints : MonoBehaviour
 {
-	public float threshhold = 0.2f;
 	public static float timeBonus = 0.25f;
 
 	protected ScoreManager scoreManager;
@@ -17,10 +16,7 @@ public class ChoreoTilePoints : MonoBehaviour
 
 	void OnTriggerStay2D(Collider2D collider)
 	{
-		if ( ( (Vector2) collider.gameObject.transform.position - (Vector2) gameObject.transform.position).magnitude < threshhold )
-		{
-			PlayerCollision();
-		}
+		PlayerCollision();
 	}
 
 	protected virtual void PlayerCollision()
