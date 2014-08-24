@@ -23,9 +23,7 @@ public class Hair : MonoBehaviour
 		for(int i = 0; i < length; i++)
 		{
 			float indexAlpha = ((float)i + 1.0f) * indexBias;
-			Debug.Log(indexAlpha);
-
-			hairPieces[i].transform.position = Vector3.Lerp(hairPieces[i].transform.position, 
+			hairPieces[i].transform.localPosition = Vector3.Lerp(hairPieces[i].transform.localPosition, 
 			                                                lastHair.position + transform.rotation * hairOffset * indexAlpha,
 			                                                Time.deltaTime * followSpeed);
 
@@ -45,6 +43,7 @@ public class Hair : MonoBehaviour
 		{
 			hairPieces[i] = Instantiate(hair, lastHair.position + hairOffset, hair.transform.rotation) as GameObject;
 			hairPieces[i].transform.localScale = Vector3.one - Vector3.one * (i)/length;
+
 			lastHair = hairPieces[i].transform;
 		}
 	}

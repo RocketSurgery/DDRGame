@@ -10,7 +10,7 @@ public class PatternRoom : MonoBehaviour
 	
 	void Awake()
 	{
-		transform.position = new Vector3((int)transform.position.x, (int)transform.position.y, 0.0f);
+		transform.position = new Vector3((int)transform.position.x, (int)transform.position.y, transform.position.z);
 		Setup(GetComponent<Pattern>());
 	}
 
@@ -22,23 +22,18 @@ public class PatternRoom : MonoBehaviour
 			{
 				GameObject pickup = Instantiate(pickupObj) as GameObject;
 
-				Vector3 pickupPos = transform.position + new Vector3(-1.0f, 1.0f) * ((float)pattern.size)/2.0f;
-				pickupPos += new Vector3(i % pattern.size, -(int)i/pattern.size);
+				Vector3 pickupPos = transform.position;
+				pickupPos += new Vector3(i % pattern.width, -i/pattern.width);
+				pickupPos.z = transform.position.z;
 
 				pickup.transform.position = pickupPos;
 			}
 		}
 	}
 
-	// Update is called once per frame
-	void Update () 
-	{
-	
-	}
-
 	void OnDrawGizmos()
 	{
-		if(drawGrid)
+		if(drawGrid && !Application.isPlaying)
 		{
 			Pattern pattern = GetComponent<Pattern>();
 
@@ -46,8 +41,9 @@ public class PatternRoom : MonoBehaviour
 			{
 				if(pattern.patternSquare[i])
 				{
-					Vector3 pickupPos = transform.position + new Vector3(-1.0f, 1.0f) * ((float)pattern.size)/2.0f;
-					pickupPos += new Vector3(i % pattern.size, -(int)i/pattern.size);
+					Vector3 pickupPos = transform.position;
+					pickupPos += new Vector3(i % pattern.width, -i/pattern.width);
+					pickupPos.z = transform.position.z;
 
 					Gizmos.color = drawColor;
 					Gizmos.DrawCube(pickupPos, Vector3.one);

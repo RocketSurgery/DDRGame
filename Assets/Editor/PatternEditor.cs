@@ -16,12 +16,17 @@ public class PatternEditor : Editor
 	public override void OnInspectorGUI()
 	{
 		GUILayout.BeginHorizontal();
-		GUILayout.Label("Pattern Width/Height");
-		pattern.size = (int)GUILayout.HorizontalSlider(pattern.size, 4.0f, 15.0f, GUILayout.Width(120));
+		GUILayout.Label("Pattern Width");
+		pattern.width = (int)GUILayout.HorizontalSlider(pattern.width, 4.0f, 15.0f, GUILayout.Width(120));
+		GUILayout.EndHorizontal();
 
-		if(pattern.size * pattern.size != pattern.patternSquare.Length)
+		GUILayout.BeginHorizontal();
+		GUILayout.Label("Pattern Width");
+		pattern.height = (int)GUILayout.HorizontalSlider(pattern.height, 4.0f, 15.0f, GUILayout.Width(120));
+
+		if(pattern.width * pattern.height != pattern.patternSquare.Length)
 		{
-			pattern.patternSquare = new bool[pattern.size * pattern.size];
+			pattern.patternSquare = new bool[pattern.width * pattern.height];
 		}
 		GUILayout.EndHorizontal();
 
@@ -32,16 +37,16 @@ public class PatternEditor : Editor
 		GUILayout.BeginHorizontal();
 		if(GUILayout.Button("Clear"))
 		{
-			pattern.patternSquare = new bool[pattern.size * pattern.size];
+			pattern.patternSquare = new bool[pattern.width * pattern.height];
 		}
 		GUILayout.EndHorizontal();
 
-		for(int i = 0; i < pattern.size; i++)
+		for(int i = 0; i < pattern.height; i++)
 		{
 			GUILayout.BeginHorizontal();
-			for(int j = 0; j < pattern.size; j++)
+			for(int j = 0; j < pattern.width; j++)
 			{
-				pattern.patternSquare[i * pattern.size + j] = GUILayout.Toggle(pattern.patternSquare[i * pattern.size + j], "", GUILayout.Width(13));
+				pattern.patternSquare[i * pattern.width + j] = GUILayout.Toggle(pattern.patternSquare[i * pattern.width + j], "", GUILayout.Width(13));
 			}
 			GUILayout.EndHorizontal();
 		}
