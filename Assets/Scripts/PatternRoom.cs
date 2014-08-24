@@ -24,8 +24,11 @@ public class PatternRoom : MonoBehaviour
 
 				Vector3 pickupPos = transform.position + new Vector3(-1.0f, 1.0f) * ((float)pattern.size)/2.0f;
 				pickupPos += new Vector3(i % pattern.size, -(int)i/pattern.size);
+                pickupPos.x = (int)pickupPos.x;
+                pickupPos.y = (int)pickupPos.y;
 
 				pickup.transform.position = pickupPos;
+                pickup.transform.SetParent( gameObject.transform.parent);
 			}
 		}
 	}
@@ -48,6 +51,8 @@ public class PatternRoom : MonoBehaviour
 				{
 					Vector3 pickupPos = transform.position + new Vector3(-1.0f, 1.0f) * ((float)pattern.size)/2.0f;
 					pickupPos += new Vector3(i % pattern.size, -(int)i/pattern.size);
+                    pickupPos.x = (int)pickupPos.x;
+                    pickupPos.y = (int)pickupPos.y;
 
 					Gizmos.color = drawColor;
 					Gizmos.DrawCube(pickupPos, Vector3.one);

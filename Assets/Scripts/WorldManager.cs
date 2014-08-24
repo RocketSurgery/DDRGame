@@ -7,6 +7,7 @@ public class WorldManager : MonoBehaviour
 	public GameObject world2;
 	public GameObject playerModel1;
 	public GameObject playerModel2;
+    public GameObject flipTiles;
 
 	public void FlipWorlds()
 	{
@@ -15,6 +16,12 @@ public class WorldManager : MonoBehaviour
 
 		playerModel1.SetActive(!playerModel1.activeSelf);
 		playerModel2.SetActive(!playerModel2.activeSelf);
+
+        foreach ( Transform flipTile in flipTiles.GetComponentInChildren<Transform>() )
+        {
+            flipTile.Rotate(0, 0, 180);
+            Debug.Log("Rotating");
+        }
 	}
 
 	// Update is called once per frame

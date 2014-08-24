@@ -23,6 +23,7 @@ public class Hair : MonoBehaviour
 		for(int i = 0; i < length; i++)
 		{
 			float indexAlpha = ((float)i + 1.0f) * indexBias;
+			//Debug.Log(indexAlpha);
 
 			hairPieces[i].transform.position = Vector3.Lerp(hairPieces[i].transform.position, 
 			                                                lastHair.position + transform.rotation * hairOffset * indexAlpha,
