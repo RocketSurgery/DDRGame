@@ -4,16 +4,11 @@ using System.Collections;
 public class CameraFollow : MonoBehaviour 
 {	
 	[SerializeField] Transform followTarget;
-	[SerializeField] float followSpeed;
-	Vector3 offset;
-
-	void Awake()
-	{
-		offset = followTarget.position - transform.position;
-	}
+	[SerializeField] float followSpeed = 10.0f;
 
 	void FixedUpdate () 
 	{
-		transform.position = Vector3.Lerp(transform.position, followTarget.position - offset, Time.deltaTime * followSpeed);
+		Vector2 flatPosition = Vector2.Lerp(transform.position, followTarget.position, Time.deltaTime * followSpeed);
+		transform.position = new Vector3(flatPosition.x, flatPosition.y, transform.position.z);
 	}
 }
