@@ -16,6 +16,7 @@ public class JumpTilePoints : ChoreoTilePoints
 {
 	public JumpTypes jump;
 	public SpriteRenderer sprite;
+	public static new float timeBonus = 1.0f;
 
 	protected override void Start()
 	{
@@ -36,6 +37,7 @@ public class JumpTilePoints : ChoreoTilePoints
 	{
 		if (JumpTypeFromInput() == jump)
 		{
+			timeManager.AddTime(timeBonus);
 			Destroy(gameObject);
 		}
 	}

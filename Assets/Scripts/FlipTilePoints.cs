@@ -22,7 +22,7 @@ public class FlipTilePoints : JumpTilePoints
 		{
 			worldManagerScript.FlipWorlds();
             lastTimeFlipWorld = Time.time;
-			//Destroy(gameObject);
+			timeManager.AddTime(timeBonus);
 		}
 	}
 }
