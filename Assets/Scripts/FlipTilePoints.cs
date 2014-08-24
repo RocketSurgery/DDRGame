@@ -19,6 +19,7 @@ public class FlipTilePoints : JumpTilePoints
 		if (JumpTypeFromInput() == jump)
 		{
 			worldManagerScript.FlipWorlds();
+			timeManager.AddTime(timeBonus);
 			Destroy(gameObject);
 		}
 	}

@@ -4,7 +4,7 @@ using System.Collections;
 public class ChoreoTilePoints : MonoBehaviour
 {
 	public float threshhold = 0.2f;
-	public float timeBonus = 0.5f;
+	public static float timeBonus = 0.25f;
 
 	protected ScoreManager scoreManager;
 	protected TimeManager timeManager;
@@ -25,7 +25,6 @@ public class ChoreoTilePoints : MonoBehaviour
 
 	protected virtual void PlayerCollision()
 	{
-		scoreManager.AddScore();
 		timeManager.AddTime(timeBonus);
 		Destroy(gameObject);
 	}
