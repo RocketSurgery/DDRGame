@@ -18,18 +18,27 @@ public class OfficeGenerator : MonoBehaviour
 		if(!rigidbody)
 		{
 			gameObject.AddComponent(typeof(Rigidbody));
-			rigidbody.useGravity = false;
-			rigidbody.constraints = RigidbodyConstraints.FreezeAll;
 		}
+
+		rigidbody.useGravity = false;
+		rigidbody.constraints = RigidbodyConstraints.FreezeAll;
 
 		StartCoroutine(SetupRoom());
 	}
 
+	void Update()
+	{
+		rigidbody.WakeUp();
+	}
+
 	IEnumerator SetupRoom()
 	{
-		GetComponent<BoxCollider>().size = new Vector3(	Mathf.Ceil(Random.Range(boundsMinMax.x, boundsMinMax.y)), 
-		                                               	Mathf.Ceil(Random.Range(boundsMinMax.x, boundsMinMax.y)),
-		          							 			Mathf.Ceil(Random.Range(boundsMinMax.x, boundsMinMax.y)));
+		Vector3 roomSize = new Vector3(	Mathf.Ceil(Random.Range(boundsMinMax.x, boundsMinMax.y)), 
+		                            					Mathf.Ceil(Random.Range(boundsMinMax.x, boundsMinMax.y)),
+		          										Mathf.Ceil(Random.Range(boundsMinMax.x, boundsMinMax.y)));
+
+		BoxCollider boxCollider = GetComponent<BoxCollider>();
+		boxCollider.size = roomSize;
 
 		Debug.Log("Before");
 		Debug.Break();
@@ -41,13 +50,13 @@ public class OfficeGenerator : MonoBehaviour
 
 		yield return 0;
 
-		int roomWidth = (int)Mathf.Ceil(collider.bounds.size.x);
-		int roomLength = (int)Mathf.Ceil(collider.bounds.size.y);
+		int roomWidth = (int)Mathf.Ceil(boxCollider.size.x);
+		int roomLength = (int)Mathf.Ceil(roomSize.y);
 
 		if(furthestCol == Vector3.zero && netPath)
 		{
 			furthestCol = netPath.position;
-			transform.position = furthestCol + netPath.forward * collider.bounds.extents.x/2.0f;
+			transform.position = furthestCol + netPath.forward * roomSize.x/2.0f;
 		}
 
 		// Horizontal
@@ -55,7 +64,7 @@ public class OfficeGenerator : MonoBehaviour
 		Vector3 roomFront = collider.bounds.min;
 		roomFront = new Vector3(Mathf.Ceil(roomFront.x), Mathf.Ceil(roomFront.y), transform.position.z);
 
-		Vector3 roomBack = roomFront + transform.up * collider.bounds.size.y;
+		Vector3 roomBack = roomFront + transform.up * roomSize.y;
 		roomBack = new Vector3(Mathf.Ceil(roomBack.x), Mathf.Ceil(roomBack.y), transform.position.z);
 
 		for(int i = 1; i < roomWidth; i++)
@@ -69,7 +78,7 @@ public class OfficeGenerator : MonoBehaviour
 		Vector3 roomLeft = collider.bounds.min;
 		roomLeft = new Vector3(Mathf.Ceil(roomLeft.x), Mathf.Ceil(roomLeft.y), transform.position.z);
 
-		Vector3 roomRight = roomLeft + transform.right * collider.bounds.size.x;
+		Vector3 roomRight = roomLeft + transform.right * roomSize.x;
 		roomRight = new Vector3(Mathf.Ceil(roomRight.x), Mathf.Ceil(roomRight.y), transform.position.z);
 
 		for(int i = 0; i < roomLength + 1; i++)
@@ -78,20 +87,41 @@ public class OfficeGenerator : MonoBehaviour
 			walls.Add(SpawnWall(roomRight + transform.up * i));
 		}
 
+		Vector3 averageWallPos = Vector3.zero;
+		foreach(GameObject wall in walls)
+		{
+			averageWallPos += wall.transform.position;
+		}
+		averageWallPos *= 1.0f/walls.Count;
+
+		GameObject clearBox = GameObject.CreatePrimitive(PrimitiveType.Cube);
+		clearBox.transform.parent = transform;
+		clearBox.transform.position = averageWallPos;
+		clearBox.transform.localScale = new Vector3(roomSize.x * 0.9f, roomSize.y * 0.9f, 1);
+
 		foreach(GameObject wall in walls)
 		{
 			wall.collider.enabled = false;
 		}
 
+		boxCollider.enabled = false;
+
 		yield return 0;
 
-		Destroy(rigidbody);
+		boxCollider.size *= 0.9f;
 
-		foreach(GameObject wall in walls)
-		{
-			wall.collider.enabled = true;
-		}
+		Destroy(clearBox);
+		//Destroy(rigidbody);
 
+//		while(true)
+//		{
+//			yield return new WaitForEndOfFrame();
+//		}
+
+//		foreach(GameObject wall in walls)
+//		{
+//			wall.collider.enabled = true;
+//		}
 
 		// Pick a random 2x1 space along the opposite wall to be the exit
 		// Put in ground objects
@@ -110,6 +140,18 @@ public class OfficeGenerator : MonoBehaviour
 
 	void OnTriggerEnter(Collider col)
 	{
+		DestroyContents(col);
+	}
+
+	void OnTriggerStay(Collider col)
+	{
+		DestroyContents(col);
+	}
+
+	void DestroyContents(Collider col)
+	{
+		Debug.Log("HEHEHE");
+
 		if(!col.transform.CompareTag("Player"))
 		{
 			float colDistance = Vector3.Distance(transform.position, col.transform.position);
@@ -117,11 +159,19 @@ public class OfficeGenerator : MonoBehaviour
 			{
 				furthestCol = col.transform.position;
 			}
-
+			
 			//foreach wall
-				//compare to find closest wall
-				//make that a doorway
+			//compare to find closest wall
+			//make that a doorway
+			
+			Destroy(col.gameObject);
+		}
+	}
 
+	void OnCollisionEnter(Collision col)
+	{
+		if(col.transform.GetComponent<NetPathmaker>())
+		{
 			Destroy(col.gameObject);
 		}
 	}

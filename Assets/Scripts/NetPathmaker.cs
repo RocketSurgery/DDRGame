@@ -5,11 +5,12 @@ using System.Collections.Generic;
 public class NetPathmaker : MonoBehaviour 
 {
 	bool firstTile = true;
-	public bool endInRoom = true;
 	public int spawnNum = 3;
 
 	[SerializeField] int minPathLength = 4;
 	public List<GameObject> spawnedObjs = new List<GameObject>();
+
+	List<NetPathmaker> childPathmakers = new List<NetPathmaker>();
 
 	int moveNum = 0;
 
@@ -50,12 +51,7 @@ public class NetPathmaker : MonoBehaviour
 
 		if(spawnNum == 0)
 		{
-			if(endInRoom)
-			{
-				SpawnOffice();
-			}
-			
-			DestroyMaker();
+			SpawnOffice();
 		}
 	}
 
@@ -81,7 +77,6 @@ public class NetPathmaker : MonoBehaviour
 		lastNetPathmaker = netPathmaker;
 		netPathmaker.spawnedObjs.Clear();
 		netPathmaker.spawnNum = spawnNum;
-		netPathmaker.endInRoom = true;
 
 		if(Random.Range(-1.0f, 1.0f) > 0.0f)
 		{
@@ -115,6 +110,8 @@ public class NetPathmaker : MonoBehaviour
 		GameObject officeGenObj = WadeUtils.Instantiate(officeGenPrefab);
 		officeGenObj.transform.position = transform.position;
 		officeGenObj.GetComponent<OfficeGenerator>().netPath = transform;
+
+		DestroyMakerAndChildren();
 	}
 
 	void OnTriggerEnter(Collider col)
@@ -128,6 +125,16 @@ public class NetPathmaker : MonoBehaviour
 		}
 	}
 
+	void DestroyMakerAndChildren()
+	{
+		foreach(NetPathmaker netPathmaker in childPathmakers)
+		{
+			netPathmaker.DestroyMaker();
+		}
+
+		DestroyMaker();
+	}
+
 	void DestroyMaker()
 	{
 		if(spawnedObjs.Count < minPathLength)
@@ -138,6 +145,7 @@ public class NetPathmaker : MonoBehaviour
 				Destroy(go);
 			}
 		}
+
 		Destroy(gameObject);
 	}
 }
