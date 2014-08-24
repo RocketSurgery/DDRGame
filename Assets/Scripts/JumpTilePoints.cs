@@ -14,6 +14,8 @@ public enum JumpTypes
 
 public class JumpTilePoints : ChoreoTilePoints
 {
+	protected ItemText itemText;
+
 	public JumpTypes jump;
 	public SpriteRenderer sprite;
 	public static new float timeBonus = 1.0f;
@@ -21,6 +23,8 @@ public class JumpTilePoints : ChoreoTilePoints
 	protected override void Start()
 	{
 		base.Start();
+
+		itemText = GameObject.Find("ItemText").GetComponent<ItemText>();
 
 		sprite = (SpriteRenderer)renderer;
 		foreach (Sprite resource in Resources.LoadAll<Sprite>(""))
@@ -38,9 +42,9 @@ public class JumpTilePoints : ChoreoTilePoints
 		if (JumpTypeFromInput() == jump)
 		{
 			timeManager.AddTime(timeBonus);
+			itemText.DisplayText("You have gained more hours on the internet!");
 			Destroy(gameObject);
 		}
-        Debug.Log("Player collision");
 	}
 
 	protected JumpTypes JumpTypeFromInput()

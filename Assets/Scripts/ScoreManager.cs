@@ -5,6 +5,14 @@ public class ScoreManager : MonoBehaviour {
 
     uint score = 0;
 
+	public uint Score
+	{
+		get
+		{
+			return score;
+		}
+	}
+
     public uint scorePerTile = 1;
 
 	// Use this for initialization
