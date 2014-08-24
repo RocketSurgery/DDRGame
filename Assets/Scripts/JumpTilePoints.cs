@@ -14,7 +14,7 @@ public enum JumpTypes
 
 public class JumpTilePoints : ChoreoTilePoints
 {
-	ItemText itemText;
+	protected ItemText itemText;
 
 	public JumpTypes jump;
 	public SpriteRenderer sprite;
