@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CollectibleTile : ChoreoTilePoints
+public class CollectibleTile : JumpTilePoints
 {
 	protected override void PlayerCollision()
 	{
-		scoreManager.AddScore();
-		Destroy(gameObject);
+		if (JumpTypeFromInput() == jump)
+		{
+			scoreManager.AddScore();
+			Destroy(gameObject);
+		}
 	}
 }
