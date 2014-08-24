@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 [RequireComponent (typeof(Pattern))]
@@ -22,12 +22,19 @@ public class PatternRoom : MonoBehaviour
 			{
 				GameObject pickup = Instantiate(pickupObj) as GameObject;
 
+<<<<<<< HEAD
 				Vector3 pickupPos = transform.position;
 				pickupPos += new Vector3(i % pattern.width, -i/pattern.width);
 				pickupPos.z = transform.position.z;
+=======
+				Vector3 pickupPos = transform.position + new Vector3(-1.0f, 1.0f) * ((float)pattern.size)/2.0f;
+				pickupPos += new Vector3(i % pattern.size, -(int)i/pattern.size);
+                pickupPos.x = (int)pickupPos.x;
+                pickupPos.y = (int)pickupPos.y;
+>>>>>>> master
 
 				pickup.transform.position = pickupPos;
-                pickup.transform.SetParent( transform.parent);
+                pickup.transform.SetParent( gameObject.transform.parent);
 			}
 		}
 	}
@@ -42,9 +49,16 @@ public class PatternRoom : MonoBehaviour
 			{
 				if(pattern.patternSquare[i])
 				{
+<<<<<<< HEAD
 					Vector3 pickupPos = transform.position;
 					pickupPos += new Vector3(i % pattern.width, -i/pattern.width);
 					pickupPos.z = transform.position.z;
+=======
+					Vector3 pickupPos = transform.position + new Vector3(-1.0f, 1.0f) * ((float)pattern.size)/2.0f;
+					pickupPos += new Vector3(i % pattern.size, -(int)i/pattern.size);
+                    pickupPos.x = (int)pickupPos.x;
+                    pickupPos.y = (int)pickupPos.y;
+>>>>>>> master
 
 					Gizmos.color = drawColor;
 					Gizmos.DrawCube(pickupPos, Vector3.one);

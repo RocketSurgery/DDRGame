@@ -3,27 +3,25 @@ using System.Collections;
 
 public class ChoreoTilePoints : MonoBehaviour
 {
-	GameObject scoreManagerObject;
-	protected ScoreManager scoreManagerComponent;
-	public float threshhold = 0.2f;
+	public static float timeBonus = 0.25f;
 
-	// Use this for initialization
-	protected virtual void Start () {
-		scoreManagerObject = GameObject.Find("ScoreManager");
-		scoreManagerComponent = scoreManagerObject.GetComponent<ScoreManager>();
+	protected ScoreManager scoreManager;
+	protected TimeManager timeManager;
+
+	protected virtual void Start ()
+	{
+		scoreManager = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
+		timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
 	}
 
 	void OnTriggerStay2D(Collider2D collider)
 	{
-		if ( (collider.gameObject.transform.position - gameObject.transform.position).magnitude < threshhold )
-		{
-			PlayerCollision();
-		}
+		PlayerCollision();
 	}
 
 	protected virtual void PlayerCollision()
 	{
-		scoreManagerComponent.AddScore();
+		timeManager.AddTime(timeBonus);
 		Destroy(gameObject);
 	}
 }

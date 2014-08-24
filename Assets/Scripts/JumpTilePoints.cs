@@ -15,22 +15,32 @@ public enum JumpTypes
 public class JumpTilePoints : ChoreoTilePoints
 {
 	public JumpTypes jump;
-	SpriteRenderer sprite;
+	public SpriteRenderer sprite;
+	public static new float timeBonus = 1.0f;
 
-	new void Start()
+	protected override void Start()
 	{
 		base.Start();
 
-		//sprite = gameObject.GetComponent<SpriteRenderer>();
-		//sprite.sprite = Resources.Load(jump.ToString(), typeof(Sprite)) as Sprite;
+		sprite = (SpriteRenderer)renderer;
+		foreach (Sprite resource in Resources.LoadAll<Sprite>(""))
+		{
+			if (resource.name == jump.ToString())
+			{
+				sprite.sprite = resource;
+				break;
+			}
+		}
 	}
 
 	protected override void PlayerCollision()
 	{
 		if (JumpTypeFromInput() == jump)
 		{
+			timeManager.AddTime(timeBonus);
 			Destroy(gameObject);
 		}
+        Debug.Log("Player collision");
 	}
 
 	protected JumpTypes JumpTypeFromInput()
