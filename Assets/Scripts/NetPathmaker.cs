@@ -9,7 +9,6 @@ public class NetPathmaker : MonoBehaviour
 
 	[SerializeField] int minPathLength = 4;
 	public List<GameObject> spawnedObjs = new List<GameObject>();
-
 	List<NetPathmaker> childPathmakers = new List<NetPathmaker>();
 
 	int moveNum = 0;
@@ -23,6 +22,7 @@ public class NetPathmaker : MonoBehaviour
 
 	void Awake()
 	{
+
 	}
 
 	void Update () 
@@ -58,6 +58,8 @@ public class NetPathmaker : MonoBehaviour
 	void SpawnPath()
 	{
 		GameObject pathObj = WadeUtils.Instantiate(pathPrefab);
+		pathObj.transform.parent = transform.parent;
+		pathObj.transform.rotation = transform.rotation;
 		spawnedObjs.Add(pathObj);
 		pathObj.transform.position = transform.position - transform.up * pathPrefab.transform.localScale.z/2.0f; 
 	}
@@ -65,6 +67,8 @@ public class NetPathmaker : MonoBehaviour
 	GameObject SpawnPath(Vector3 spawnPos)
 	{
 		GameObject pathObj = WadeUtils.Instantiate(pathPrefab);
+		pathObj.transform.parent = transform.parent;
+		pathObj.transform.rotation = transform.rotation;
 		pathObj.transform.position = spawnPos - transform.up * pathPrefab.transform.localScale.z/2.0f; 
 		return pathObj;
 	}
@@ -72,6 +76,7 @@ public class NetPathmaker : MonoBehaviour
 	void SpawnPathmaker()
 	{
 		GameObject pathMakerObj = WadeUtils.Instantiate(gameObject);
+		pathMakerObj.transform.parent = transform.parent;
 
 		NetPathmaker netPathmaker = pathMakerObj.GetComponent<NetPathmaker>();
 		lastNetPathmaker = netPathmaker;
@@ -100,9 +105,6 @@ public class NetPathmaker : MonoBehaviour
 			netPathmaker.spawnedObjs.Add(SpawnPath(transform.position - transform.forward - transform.right));
 			netPathmaker.spawnedObjs.Add(SpawnPath(transform.position + transform.right));
 		}
-
-//		Debug.LogError("FUCK YOU");
-//		Debug.Break();
 	}
 
 	void SpawnOffice()

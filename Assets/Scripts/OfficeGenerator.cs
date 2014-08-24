@@ -7,9 +7,21 @@ public class OfficeGenerator : MonoBehaviour
 	[SerializeField] Vector2 boundsMinMax = new Vector2(6, 15);
 
 	public Transform netPath;
-	Vector3 furthestCol = Vector3.zero;
+	Vector3 furthestPos;
+	Vector3 furthestDir;
+
+	[SerializeField] float groundHeight = 0.0f;
 
 	[SerializeField] GameObject wallPrefab;
+	[SerializeField] GameObject floorPrefab;
+
+	Vector3 rayDir = Vector3.zero;
+	Vector3 rayStart = Vector3.zero;
+
+	int roomWidth = 0;
+	int roomLength = 0;
+
+	[HideInInspector] public float timeAlive = 0.0f;
 
 	List<GameObject> walls = new List<GameObject>();
 
@@ -26,9 +38,12 @@ public class OfficeGenerator : MonoBehaviour
 		StartCoroutine(SetupRoom());
 	}
 
-	void Update()
+	void FixedUpdate()
 	{
-		rigidbody.WakeUp();
+		if(rigidbody)
+			rigidbody.WakeUp();
+
+		timeAlive += Time.deltaTime;
 	}
 
 	IEnumerator SetupRoom()
@@ -38,10 +53,8 @@ public class OfficeGenerator : MonoBehaviour
 		          										Mathf.Ceil(Random.Range(boundsMinMax.x, boundsMinMax.y)));
 
 		BoxCollider boxCollider = GetComponent<BoxCollider>();
+		boxCollider.enabled = false;
 		boxCollider.size = roomSize;
-
-		Debug.Log("Before");
-		Debug.Break();
 
 		// Get all objects in collision box
 		// Save the position of the farthest away and a 2x1 box is the entrance
@@ -50,13 +63,16 @@ public class OfficeGenerator : MonoBehaviour
 
 		yield return 0;
 
-		int roomWidth = (int)Mathf.Ceil(boxCollider.size.x);
-		int roomLength = (int)Mathf.Ceil(roomSize.y);
+		boxCollider.enabled = true;
 
-		if(furthestCol == Vector3.zero && netPath)
+		roomWidth = (int)Mathf.Ceil(boxCollider.size.x);
+		roomLength = (int)Mathf.Ceil(roomSize.y);
+
+		if(furthestPos == Vector3.zero && netPath)
 		{
-			furthestCol = netPath.position;
-			transform.position = furthestCol + netPath.forward * roomSize.x/2.0f;
+			furthestPos = netPath.transform.position;
+			furthestDir = netPath.transform.forward;
+			transform.position = furthestPos + netPath.forward * roomSize.x/2.0f;
 		}
 
 		// Horizontal
@@ -95,9 +111,17 @@ public class OfficeGenerator : MonoBehaviour
 		averageWallPos *= 1.0f/walls.Count;
 
 		GameObject clearBox = GameObject.CreatePrimitive(PrimitiveType.Cube);
+		clearBox.layer = LayerMask.NameToLayer("Ignore Raycast");
 		clearBox.transform.parent = transform;
 		clearBox.transform.position = averageWallPos;
-		clearBox.transform.localScale = new Vector3(roomSize.x * 0.9f, roomSize.y * 0.9f, 1);
+		clearBox.transform.localScale = new Vector3(roomSize.x, roomSize.y, 1);
+
+		GameObject floor = WadeUtils.Instantiate(floorPrefab);
+		clearBox.layer = LayerMask.NameToLayer("Ignore Raycast");
+		floor.transform.parent = transform;
+		averageWallPos.z = groundHeight;
+		floor.transform.position = averageWallPos;
+		floor.transform.localScale = new Vector3(roomSize.x - 2, roomSize.y - 2, 1);
 
 		foreach(GameObject wall in walls)
 		{
@@ -106,22 +130,19 @@ public class OfficeGenerator : MonoBehaviour
 
 		boxCollider.enabled = false;
 
-		yield return 0;
+		Debug.Break();
 
-		boxCollider.size *= 0.9f;
+		yield return new WaitForSeconds(3.0f);
+
+		foreach(GameObject wall in walls)
+		{
+			wall.collider.enabled = true;
+		}
 
 		Destroy(clearBox);
-		//Destroy(rigidbody);
+		Destroy(rigidbody);
 
-//		while(true)
-//		{
-//			yield return new WaitForEndOfFrame();
-//		}
-
-//		foreach(GameObject wall in walls)
-//		{
-//			wall.collider.enabled = true;
-//		}
+		MakeEntrances();
 
 		// Pick a random 2x1 space along the opposite wall to be the exit
 		// Put in ground objects
@@ -148,22 +169,51 @@ public class OfficeGenerator : MonoBehaviour
 		DestroyContents(col);
 	}
 
+	void MakeEntrances()
+	{
+		if(furthestDir == Vector3.right)
+		{
+			rayStart.x = transform.position.x;
+		}
+		else
+		{
+			rayStart.y = transform.position.y;
+		}
+		rayStart.z = -0.0f;
+		
+		RaycastHit hit = WadeUtils.RaycastAndGetInfo(new Ray(rayStart, furthestDir), Mathf.Infinity);
+		if(hit.transform)
+		{
+			Destroy(hit.transform.gameObject);
+		}
+		
+		hit = WadeUtils.RaycastAndGetInfo(new Ray(rayStart, -furthestDir), Mathf.Infinity);
+		if(hit.transform)
+		{
+			Destroy(hit.transform.gameObject);
+		}
+	}
+
 	void DestroyContents(Collider col)
 	{
-		Debug.Log("HEHEHE");
-
 		if(!col.transform.CompareTag("Player"))
 		{
 			float colDistance = Vector3.Distance(transform.position, col.transform.position);
-			if( colDistance > Vector3.Distance(furthestCol, transform.position))
+			if(colDistance > Vector3.Distance(transform.position + furthestPos, transform.position))
 			{
-				furthestCol = col.transform.position;
+				furthestPos = col.transform.position;
+				furthestDir = col.transform.forward;
+				rayStart = furthestPos;
 			}
-			
+
 			//foreach wall
 			//compare to find closest wall
 			//make that a doorway
-			
+
+			Destroy(col.gameObject);
+		}
+		else
+		{
 			Destroy(col.gameObject);
 		}
 	}
@@ -174,5 +224,39 @@ public class OfficeGenerator : MonoBehaviour
 		{
 			Destroy(col.gameObject);
 		}
+		else
+		{
+			OfficeGenerator otherOffice = col.transform.GetComponent<OfficeGenerator>();
+			if(otherOffice && otherOffice.timeAlive <= timeAlive)
+			{
+				Destroy(col.gameObject);
+			}
+		}
+	}
+
+	void OnDrawGizmos()
+	{
+		if(furthestPos != Vector3.zero)
+		{
+			Gizmos.color = Color.red;
+			Gizmos.DrawCube(furthestPos, Vector3.one);
+		}
+
+		for(int i = 0; i < roomWidth * 2 - 2; i++)
+		{
+			if(walls[i])
+			{
+				Gizmos.color = Color.blue;
+				Gizmos.DrawCube(walls[i].transform.position, Vector3.one);
+			}
+		}
+
+		Gizmos.color = Color.green;
+		Gizmos.DrawCube(rayStart, Vector3.one);
+
+		Gizmos.DrawLine(rayStart, rayStart + rayDir * 3.0f);
+
+		Gizmos.color = Color.red;
+		Gizmos.DrawLine(rayStart, rayStart - rayDir * 3.0f);
 	}
 }

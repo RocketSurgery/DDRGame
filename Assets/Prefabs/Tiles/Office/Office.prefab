@@ -11,7 +11,7 @@ GameObject:
   - 114: {fileID: 11400000}
   - 54: {fileID: 5400000}
   - 65: {fileID: 6500000}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Office
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -70,7 +70,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boundsMinMax: {x: 4, y: 15}
   netPath: {fileID: 0}
+  groundHeight: 1.5
   wallPrefab: {fileID: 100000, guid: 76c894f154cb741e09c326cb964abcb4, type: 2}
+  floorPrefab: {fileID: 100000, guid: e59248ed287bc407398afdcb41bc61ad, type: 2}
+  timeAlive: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
