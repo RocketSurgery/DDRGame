@@ -15,7 +15,7 @@ public class ChoreoTilePoints : MonoBehaviour
 
 	void OnTriggerStay2D(Collider2D collider)
 	{
-		if ( (collider.gameObject.transform.position - gameObject.transform.position).magnitude < threshhold )
+		if ( ( (Vector2) collider.gameObject.transform.position - (Vector2) gameObject.transform.position).magnitude < threshhold )
 		{
 			PlayerCollision();
 		}

@@ -18,7 +18,7 @@ public class FlipTilePoints : JumpTilePoints
 
 	protected override void PlayerCollision()
 	{
-		if (JumpTypeFromInput() == jump && (Time.time - lastTimeFlipWorld) > 0.1f) // Make it so the world doesn't flip back immediately
+		if (JumpTypeFromInput() == jump && (Time.time - lastTimeFlipWorld) > 1.0f) // Make it so the world doesn't flip back immediately
 		{
 			worldManagerScript.FlipWorlds();
             lastTimeFlipWorld = Time.time;
