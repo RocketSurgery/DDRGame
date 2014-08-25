@@ -13,7 +13,7 @@ GameObject:
   - 65: {fileID: 6500000}
   m_Layer: 2
   m_Name: Office
-  m_TagString: Untagged
+  m_TagString: Office
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -73,6 +73,7 @@ MonoBehaviour:
   groundHeight: 1.5
   wallPrefab: {fileID: 100000, guid: 76c894f154cb741e09c326cb964abcb4, type: 2}
   floorPrefab: {fileID: 100000, guid: e59248ed287bc407398afdcb41bc61ad, type: 2}
+  doorPrefab: {fileID: 100000, guid: e0c6d5f4d11a04048ac5d863faa3becd, type: 2}
   timeAlive: 0
 --- !u!1001 &100100000
 Prefab:

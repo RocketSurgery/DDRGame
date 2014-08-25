@@ -58,7 +58,8 @@ public class NetPathmaker : MonoBehaviour
 	void SpawnPath()
 	{
 		GameObject pathObj = WadeUtils.Instantiate(pathPrefab);
-		pathObj.transform.parent = transform.parent;
+		pathObj.transform.parent = NetPathmakerManager.singleton.instance.internetTileHolder;
+		NetPathmakerManager.singleton.instance.internetTiles.Add(pathObj.transform);
 		pathObj.transform.rotation = transform.rotation;
 		spawnedObjs.Add(pathObj);
 		pathObj.transform.position = transform.position - transform.up * pathPrefab.transform.localScale.z/2.0f; 
@@ -67,7 +68,8 @@ public class NetPathmaker : MonoBehaviour
 	GameObject SpawnPath(Vector3 spawnPos)
 	{
 		GameObject pathObj = WadeUtils.Instantiate(pathPrefab);
-		pathObj.transform.parent = transform.parent;
+		pathObj.transform.parent = NetPathmakerManager.singleton.instance.internetTileHolder;
+		NetPathmakerManager.singleton.instance.internetTiles.Add(pathObj.transform);
 		pathObj.transform.rotation = transform.rotation;
 		pathObj.transform.position = spawnPos - transform.up * pathPrefab.transform.localScale.z/2.0f; 
 		return pathObj;
@@ -76,7 +78,9 @@ public class NetPathmaker : MonoBehaviour
 	void SpawnPathmaker()
 	{
 		GameObject pathMakerObj = WadeUtils.Instantiate(gameObject);
-		pathMakerObj.transform.parent = transform.parent;
+		pathMakerObj.transform.parent = NetPathmakerManager.singleton.instance.netPathmakerHolder;
+		pathMakerObj.transform.position = transform.position;
+		pathMakerObj.transform.rotation = transform.rotation;
 
 		NetPathmaker netPathmaker = pathMakerObj.GetComponent<NetPathmaker>();
 		lastNetPathmaker = netPathmaker;
@@ -86,7 +90,7 @@ public class NetPathmaker : MonoBehaviour
 		if(Random.Range(-1.0f, 1.0f) > 0.0f)
 		{
 			pathMakerObj.transform.position += Vector3.right;
-			pathMakerObj.transform.rotation *= Quaternion.Euler(0.0f, 90.0f, 0.0f);
+			pathMakerObj.transform.localRotation *= Quaternion.Euler(0.0f, 90.0f, 0.0f);
 
 			netPathmaker.spawnedObjs.Add(SpawnPath(transform.position + transform.forward + transform.right));
 			netPathmaker.spawnedObjs.Add(SpawnPath(transform.position + transform.forward - transform.right));
@@ -97,7 +101,7 @@ public class NetPathmaker : MonoBehaviour
 		else
 		{
 			pathMakerObj.transform.position -= Vector3.right;
-			pathMakerObj.transform.rotation *= Quaternion.Euler(0.0f, -90.0f, 0.0f);
+			pathMakerObj.transform.localRotation *= Quaternion.Euler(0.0f, -90.0f, 0.0f);
 
 			netPathmaker.spawnedObjs.Add(SpawnPath(transform.position + transform.forward + transform.right));
 			netPathmaker.spawnedObjs.Add(SpawnPath(transform.position + transform.forward - transform.right));
@@ -109,15 +113,24 @@ public class NetPathmaker : MonoBehaviour
 
 	void SpawnOffice()
 	{
-		GameObject officeGenObj = WadeUtils.Instantiate(officeGenPrefab);
-		officeGenObj.transform.position = transform.position;
-		officeGenObj.GetComponent<OfficeGenerator>().netPath = transform;
+		if(Vector3.Distance(transform.position, NetPathmakerManager.singleton.instance.player.transform.position) > 25)
+		{
+			GameObject officeGenObj = WadeUtils.Instantiate(officeGenPrefab);
+			officeGenObj.transform.parent = NetPathmakerManager.singleton.instance.officeHolder;
+			officeGenObj.transform.position = transform.position;
+			officeGenObj.GetComponent<OfficeGenerator>().netPath = transform;
+		}
 
 		DestroyMakerAndChildren();
 	}
 
 	void OnTriggerEnter(Collider col)
 	{
+		if(col.CompareTag("Office"))
+		{
+			DestroyMaker();
+		}
+
 		if(!spawnedObjs.Contains(col.gameObject))
 		{
 			if(lastNetPathmaker && !lastNetPathmaker.spawnedObjs.Contains(col.gameObject))

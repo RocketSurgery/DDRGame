@@ -14,9 +14,18 @@ public class OfficeGenerator : MonoBehaviour
 
 	[SerializeField] GameObject wallPrefab;
 	[SerializeField] GameObject floorPrefab;
+	[SerializeField] GameObject doorPrefab;
+
+	Transform floor;
+	public Transform ceiling;
+	Transform wallHolder;
+	Transform doorHolder;
 
 	Vector3 rayDir = Vector3.zero;
 	Vector3 rayStart = Vector3.zero;
+	Quaternion doorRot;
+
+	public bool insideOffice = false;
 
 	int roomWidth = 0;
 	int roomLength = 0;
@@ -27,6 +36,18 @@ public class OfficeGenerator : MonoBehaviour
 
 	void Awake()
 	{
+		GameObject wallHolderObj = new GameObject("WallHolder");
+		wallHolder = wallHolderObj.transform;
+		wallHolder.parent = transform;
+		wallHolder.position = transform.position;
+
+		GameObject doorHolderObj = new GameObject("DoorHolder");
+		doorHolder = doorHolderObj.transform;
+		doorHolder.parent = transform;
+		doorHolder.position = transform.position;
+
+		furthestPos.z = transform.position.z;
+
 		if(!rigidbody)
 		{
 			gameObject.AddComponent(typeof(Rigidbody));
@@ -41,7 +62,9 @@ public class OfficeGenerator : MonoBehaviour
 	void FixedUpdate()
 	{
 		if(rigidbody)
+		{
 			rigidbody.WakeUp();
+		}
 
 		timeAlive += Time.deltaTime;
 	}
@@ -49,8 +72,8 @@ public class OfficeGenerator : MonoBehaviour
 	IEnumerator SetupRoom()
 	{
 		Vector3 roomSize = new Vector3(	Mathf.Ceil(Random.Range(boundsMinMax.x, boundsMinMax.y)), 
-		                            					Mathf.Ceil(Random.Range(boundsMinMax.x, boundsMinMax.y)),
-		          										Mathf.Ceil(Random.Range(boundsMinMax.x, boundsMinMax.y)));
+		                            	Mathf.Ceil(Random.Range(boundsMinMax.x, boundsMinMax.y)),
+		          						Mathf.Ceil(Random.Range(boundsMinMax.x, boundsMinMax.y)));
 
 		BoxCollider boxCollider = GetComponent<BoxCollider>();
 		boxCollider.enabled = false;
@@ -70,7 +93,7 @@ public class OfficeGenerator : MonoBehaviour
 
 		if(furthestPos == Vector3.zero && netPath)
 		{
-			furthestPos = netPath.transform.position;
+			furthestPos = transform.position;
 			furthestDir = netPath.transform.forward;
 			transform.position = furthestPos + netPath.forward * roomSize.x/2.0f;
 		}
@@ -116,12 +139,20 @@ public class OfficeGenerator : MonoBehaviour
 		clearBox.transform.position = averageWallPos;
 		clearBox.transform.localScale = new Vector3(roomSize.x, roomSize.y, 1);
 
-		GameObject floor = WadeUtils.Instantiate(floorPrefab);
-		clearBox.layer = LayerMask.NameToLayer("Ignore Raycast");
-		floor.transform.parent = transform;
+		GameObject floorObj = WadeUtils.Instantiate(floorPrefab);
+		floor = floorObj.transform;
+		floor.parent = transform;
 		averageWallPos.z = groundHeight;
-		floor.transform.position = averageWallPos;
-		floor.transform.localScale = new Vector3(roomSize.x - 2, roomSize.y - 2, 1);
+		floor.position = averageWallPos;
+		floor.localScale = new Vector3(roomSize.x - 1, roomSize.y - 1, 1);
+
+		GameObject ceilingObj = WadeUtils.Instantiate(floorPrefab);
+		ceilingObj.renderer.material.color = Color.black;
+		ceiling = ceilingObj.transform;
+		ceiling.parent = transform;
+		averageWallPos.z = groundHeight - 3.0f;
+		ceiling.position = averageWallPos;
+		ceiling.localScale = new Vector3(roomSize.x - 1, roomSize.y - 1, 1);
 
 		foreach(GameObject wall in walls)
 		{
@@ -130,9 +161,7 @@ public class OfficeGenerator : MonoBehaviour
 
 		boxCollider.enabled = false;
 
-		Debug.Break();
-
-		yield return new WaitForSeconds(3.0f);
+		yield return new WaitForSeconds(0.5f);
 
 		foreach(GameObject wall in walls)
 		{
@@ -144,8 +173,6 @@ public class OfficeGenerator : MonoBehaviour
 
 		MakeEntrances();
 
-		// Pick a random 2x1 space along the opposite wall to be the exit
-		// Put in ground objects
 		// Put in office objects
 		// Pick an appropriately size pattern
 	}
@@ -153,7 +180,7 @@ public class OfficeGenerator : MonoBehaviour
 	GameObject SpawnWall(Vector3 pos)
 	{
 		GameObject officeWall = WadeUtils.Instantiate(wallPrefab, pos, wallPrefab.transform.rotation);
-		officeWall.transform.parent = transform;
+		officeWall.transform.parent = wallHolder;
 		officeWall.name = "OfficeWall";
 
 		return officeWall;
@@ -180,16 +207,55 @@ public class OfficeGenerator : MonoBehaviour
 			rayStart.y = transform.position.y;
 		}
 		rayStart.z = -0.0f;
-		
+
+		GameObject currentOfficeObj = NetPathmakerManager.singleton.instance.worldManager.currentOffice;
+
+		OfficeGenerator currentOffice = null;
+		if(currentOfficeObj)
+		{
+			currentOffice = currentOfficeObj.GetComponent<OfficeGenerator>();
+		}
+
 		RaycastHit hit = WadeUtils.RaycastAndGetInfo(new Ray(rayStart, furthestDir), Mathf.Infinity);
 		if(hit.transform)
 		{
+			// spawn entrance prefab
+			// aim it correctly
+
+			GameObject door = WadeUtils.Instantiate(doorPrefab);
+			door.transform.parent = doorHolder;
+			door.transform.position = hit.transform.position;
+			door.transform.rotation = doorRot;
+			door.transform.rotation.SetFromToRotation(door.transform.up, door.transform.forward);
+			door.transform.localRotation *= Quaternion.Euler(90.0f, 0.0f, 180.0f);
+
+			if(currentOffice && currentOffice.insideOffice)
+			{
+				door.transform.localRotation *= Quaternion.Euler(0.0f, 0.0f, 180.0f);
+			}
+
+			door.GetComponent<FlipTilePoints>().office = gameObject;
+
 			Destroy(hit.transform.gameObject);
 		}
 		
 		hit = WadeUtils.RaycastAndGetInfo(new Ray(rayStart, -furthestDir), Mathf.Infinity);
 		if(hit.transform)
 		{
+			GameObject door = WadeUtils.Instantiate(doorPrefab);
+			door.transform.parent = doorHolder;
+			door.transform.position = hit.transform.position;
+			door.transform.rotation = doorRot * Quaternion.Euler(0.0f, 0.0f, 180.0f);
+			door.transform.rotation.SetFromToRotation(door.transform.up, door.transform.forward);
+			door.transform.localRotation *= Quaternion.Euler(-90.0f, 0.0f, 180.0f); 
+
+			if(currentOffice && currentOffice.insideOffice)
+			{
+				door.transform.localRotation *= Quaternion.Euler(0.0f, 0.0f, 180.0f);
+			}
+
+			door.GetComponent<FlipTilePoints>().office = gameObject;
+
 			Destroy(hit.transform.gameObject);
 		}
 	}
@@ -204,6 +270,7 @@ public class OfficeGenerator : MonoBehaviour
 				furthestPos = col.transform.position;
 				furthestDir = col.transform.forward;
 				rayStart = furthestPos;
+				doorRot = col.transform.rotation;
 			}
 
 			//foreach wall
@@ -231,6 +298,32 @@ public class OfficeGenerator : MonoBehaviour
 			{
 				Destroy(col.gameObject);
 			}
+		}
+	}
+
+	public void RespawnInternet(Transform entrance)
+	{
+		Transform[] doors = doorHolder.GetComponentsInChildren<Transform>();
+
+		if(doors.Length > 1)
+		{
+			foreach(Transform t in doorHolder.GetComponentsInChildren<Transform>())
+			{
+				if(t != doorHolder && t != entrance)
+				{
+					Vector3 spawnPos = t.position;
+					spawnPos.z = transform.position.z;
+
+					Quaternion makerRot = t.localRotation * Quaternion.Euler(-90.0f, 0.0f, 0.0f);
+					NetPathmakerManager.singleton.instance.SpawnNetPathmaker(spawnPos + t.up, makerRot);
+
+					return;
+				}
+			}
+		}
+		else
+		{
+
 		}
 	}
 
