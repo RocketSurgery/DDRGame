@@ -1,15 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CollectibleTile : JumpTilePoints
+public class CollectibleTile : MonoBehaviour
 {
-	protected override void PlayerCollision()
+	void OnTriggerStay2D()
 	{
-		if (JumpTypeFromInput() == jump)
-		{
-			scoreManager.AddScore();
-			itemText.DisplayText("You have stolen some government secrets!");
-			Destroy(gameObject);
-		}
+		ScoreManager.singleton.instance.AddScore();
+		ItemText.singleton.instance.DisplayText("You have stolen some government secrets!");
+		Destroy(gameObject);
 	}
 }

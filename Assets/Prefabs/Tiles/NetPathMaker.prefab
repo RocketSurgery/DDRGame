@@ -102,6 +102,8 @@ MonoBehaviour:
   spawnedObjs: []
   pathPrefab: {fileID: 100002, guid: 8b56802f2d79f4073810a5018b628016, type: 2}
   spawnMod: .899999976
+  spawnPointsChance: .0500000007
+  pointPrefab: {fileID: 100000, guid: ee6907235bb7970438259b3e3efef06e, type: 2}
   officeGenPrefab: {fileID: 100000, guid: 97bc30c8ea42c4ed5832071a9ce183f0, type: 2}
 --- !u!1001 &100100000
 Prefab:

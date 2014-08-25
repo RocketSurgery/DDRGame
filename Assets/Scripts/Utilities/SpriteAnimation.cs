@@ -52,6 +52,12 @@ public class SpriteAnimation : MonoBehaviour
         Animate();
     }
 
+	public void SetRandomFrame()
+	{
+		currentAnim = animations[startAnim];
+		currentFrame = Random.Range(currentAnim.startFrame, currentAnim.startFrame + currentAnim.animFrames);
+	}
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -62,8 +68,11 @@ public class SpriteAnimation : MonoBehaviour
 		
 		//
 		currentSheet = spriteSheets[currentAnim.sheetNum];
-		
-		currentFrame = currentAnim.startFrame;
+
+		if(currentFrame == 0)
+		{
+			currentFrame = currentAnim.startFrame;
+		}
 		
 		//Assign sprite, find width/height of frames, set sprite scale
 		FrameData();

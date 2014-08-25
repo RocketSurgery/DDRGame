@@ -1,19 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ScoreManager : MonoBehaviour {
+public class ScoreManager : MonoBehaviour 
+{
+	public static SingletonBehaviour<ScoreManager> singleton = new SingletonBehaviour<ScoreManager>();
 
-    static uint score = 0;
+    public int score = 0;
 
-	public static uint Score
-	{
-		get
-		{
-			return score;
-		}
-	}
-
-    public uint scorePerTile = 1;
+    public int scorePerTile = 1;
 
 	// Use this for initialization
 	void Start () {

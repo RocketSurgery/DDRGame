@@ -4,6 +4,8 @@ using System.Collections;
 
 public class ItemText : MonoBehaviour
 {
+	public static SingletonBehaviour<ItemText> singleton = new SingletonBehaviour<ItemText>();
+
 	public float displayTime = 2.0f;
 	float remainingTime = 0.0f;
 
