@@ -11,6 +11,7 @@ public class TimeManager : MonoBehaviour
     public GameObject player;
     public GameObject endScreen;
     public GameObject endTextObject;
+    public GameObject mainMenuButton;
 
 	void Update ()
 	{
@@ -19,7 +20,16 @@ public class TimeManager : MonoBehaviour
 		{
             remainingTime = 0;
             player.GetComponent<Player>().moveSpeed = 0;
+
+            GameObject[] playerStuff = GameObject.FindGameObjectsWithTag("Player");
+
+            foreach (GameObject go in playerStuff)
+            {
+                go.SetActive(false);
+            }
+
             endScreen.SetActive(true);
+            mainMenuButton.SetActive(true);
             Text endTextComponent = endTextObject.GetComponent<Text>();
             endTextComponent.text = "You have ran out of hours on the internet.\nYou leaked " + ScoreManager.singleton.instance.score + " documents";
             Color newColor = endTextComponent.color;
