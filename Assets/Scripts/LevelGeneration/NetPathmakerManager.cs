@@ -13,14 +13,11 @@ public class NetPathmakerManager : MonoBehaviour
 	public Transform officeHolder;
 	public Transform netPathmakerHolder;
 
-	public WorldManager worldManager;
-
 	void Awake()
 	{
 		singleton.DontDestroyElseKill(this);
 
 		player = GameObject.Find("Player").GetComponent<Player>();
-		worldManager = GameObject.Find("WorldManager").GetComponent<WorldManager>();
 	}
 
 	public void SpawnNetPathmaker(Vector3 position, Quaternion rotation)

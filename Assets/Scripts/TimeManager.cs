@@ -3,6 +3,8 @@ using System.Collections;
 
 public class TimeManager : MonoBehaviour
 {
+	public static SingletonBehaviour<TimeManager> singleton = new SingletonBehaviour<TimeManager>();
+
 	public float remainingTime = 20.0f;
 	public bool debug = false;
 

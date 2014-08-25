@@ -3,41 +3,34 @@ using System.Collections;
 
 public class FlipTilePoints : JumpTilePoints
 {
-	public GameObject office;
-
-	GameObject worldManagerObject;
-	WorldManager worldManagerScript;
+	public OfficeGenerator office;
 
     float lastTimeFlipWorld = 0;
 
 	protected override void Start()
 	{
 		base.Start();
-
-		worldManagerObject = GameObject.Find("WorldManager");
-		worldManagerScript = worldManagerObject.GetComponent<WorldManager>();
 	}
 
     void OnTriggerStay2D(Collider2D collider)
     {
-        if (JumpTypeFromInput() == jump && (Time.time - lastTimeFlipWorld) > 1.0f) // Make it so the world doesn't flip back immediately
+        if (collider.GetComponent<Player>() && JumpTypeFromInput() == jump && (Time.time - lastTimeFlipWorld) > 1.0f) // Make it so the world doesn't flip back immediately
 		{
-			worldManagerScript.currentOffice = office;
-			worldManagerScript.FlipWorlds();
+			WorldManager.singleton.instance.currentOffice = office;
+			WorldManager.singleton.instance.FlipWorlds();
 
-			OfficeGenerator officeGenerator = office.GetComponent<OfficeGenerator>();
-
-			if(worldManagerScript.officeMode)
+			if(WorldManager.singleton.instance.officeMode)
 			{
-				officeGenerator.ceiling.gameObject.SetActive(false);
-				officeGenerator.insideOffice = true;
+				office.ceiling.gameObject.SetActive(false);
+				office.insideOffice = true;
 
-				transform.parent.parent.GetComponent<OfficeGenerator>().RespawnInternet(transform);
+				office.settingUp = true;
+				office.RespawnInternet(transform);
 			}
 			else
 			{
-				officeGenerator.ceiling.gameObject.SetActive(true);
-				officeGenerator.insideOffice = false;
+				office.ceiling.gameObject.SetActive(true);
+				office.insideOffice = false;
 			}
 
             lastTimeFlipWorld = Time.time;
@@ -49,9 +42,9 @@ public class FlipTilePoints : JumpTilePoints
 	{
 		if (JumpTypeFromInput() == jump && (Time.time - lastTimeFlipWorld) > 1.0f) // Make it so the world doesn't flip back immediately
 		{
-			worldManagerScript.FlipWorlds();
+			WorldManager.singleton.instance.FlipWorlds();
             lastTimeFlipWorld = Time.time;
-			timeManager.AddTime(timeBonus);
+			TimeManager.singleton.instance.AddTime(timeBonus);
 		}
 	}
 }

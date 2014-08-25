@@ -4,7 +4,6 @@ using System.Collections;
 
 public class TimeScript : MonoBehaviour
 {
-	TimeManager timeManager;
 	Text text;
 	string baseText;
 
@@ -12,11 +11,10 @@ public class TimeScript : MonoBehaviour
 	{
 		text = GetComponent<Text>();
 		baseText = text.text;
-		timeManager = GameObject.Find("TimeManager").GetComponent<TimeManager>();
 	}
 
 	void Update()
 	{
-		text.text = baseText + timeManager.Time.ToString("f2");
+		text.text = baseText + TimeManager.singleton.instance.Time.ToString("f2");
 	}
 }

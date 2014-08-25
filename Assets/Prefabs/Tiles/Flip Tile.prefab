@@ -30,7 +30,7 @@ GameObject:
   - 61: {fileID: 6100002}
   m_Layer: 0
   m_Name: Invisible Wall
-  m_TagString: Untagged
+  m_TagString: FlipTile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -100,9 +100,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 878c87cf20a05584ead480cbef926fad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  threshhold: .200000003
   jump: 0
   sprite: {fileID: 0}
+  office: {fileID: 0}
 --- !u!212 &21200000
 SpriteRenderer:
   m_ObjectHideFlags: 1

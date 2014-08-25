@@ -9,11 +9,11 @@ GameObject:
   m_Component:
   - 4: {fileID: 400000}
   - 114: {fileID: 11400000}
-  - 54: {fileID: 5400000}
-  - 65: {fileID: 6500000}
-  m_Layer: 2
-  m_Name: Office
-  m_TagString: Office
+  - 50: {fileID: 5000000}
+  - 58: {fileID: 5800000}
+  m_Layer: 0
+  m_Name: PatternMaker
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -25,38 +25,37 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10, y: 0, z: 0}
+  m_LocalPosition: {x: -14.4801798, y: 51.2448273, z: -.694794655}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!54 &5400000
-Rigidbody:
+--- !u!50 &5000000
+Rigidbody2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
-  serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
+  m_LinearDrag: 0
   m_AngularDrag: .0500000007
-  m_UseGravity: 0
+  m_GravityScale: 0
+  m_FixedAngle: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 126
+  m_SleepingMode: 2
   m_CollisionDetection: 0
---- !u!65 &6500000
-BoxCollider:
+--- !u!58 &5800000
+CircleCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 100000}
+  m_Enabled: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: .5
+  m_Center: {x: 0, y: 0}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -65,19 +64,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 100000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c52c166c9522426aae667d84ff5c2c6, type: 3}
+  m_Script: {fileID: 11500000, guid: 4698e625123c24652a536e962dcedc9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boundsMinMax: {x: 4, y: 15}
-  netPath: {fileID: 0}
-  groundHeight: 1.5
-  wallPrefab: {fileID: 100000, guid: 76c894f154cb741e09c326cb964abcb4, type: 2}
-  floorPrefab: {fileID: 100000, guid: e59248ed287bc407398afdcb41bc61ad, type: 2}
-  doorPrefab: {fileID: 100000, guid: e0c6d5f4d11a04048ac5d863faa3becd, type: 2}
-  patternMakerPrefab: {fileID: 100000, guid: 1f6df1273d6fb45348350bffe5eb211a, type: 2}
-  ceiling: {fileID: 0}
-  insideOffice: 0
-  timeAlive: 0
+  decorationPrefabs:
+  - {fileID: 100000, guid: 054c8faaaf5374f9da11686c51d83202, type: 2}
+  - {fileID: 100000, guid: 95f42124bab454563b5c27135d08f162, type: 2}
+  - {fileID: 100000, guid: fb5439fe8c91d4678ba0b9819cce315c, type: 2}
+  - {fileID: 100000, guid: 2207c46599b094dff901ffbf1d85ace6, type: 2}
+  - {fileID: 100000, guid: 1266c0c3cf5f04825afa5cb6982a4cb1, type: 2}
+  - {fileID: 100000, guid: c385462ff8af141969f4c7f58a6aaf78, type: 2}
+  - {fileID: 100000, guid: 82e800079beea40c680a43532a00c079, type: 2}
+  pointsPrefab: {fileID: 100002, guid: d7b277d27e36bb247aa6556305b02362, type: 2}
+  justSpawned: 1
+  spawnNum: 4
+  turnChance: .400000006
+  decorationChance: .200000003
+  maxTimeAlive: 1
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

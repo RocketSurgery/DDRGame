@@ -15,36 +15,38 @@ public class OfficeGenerator : MonoBehaviour
 	[SerializeField] GameObject wallPrefab;
 	[SerializeField] GameObject floorPrefab;
 	[SerializeField] GameObject doorPrefab;
+	[SerializeField] GameObject patternMakerPrefab;
 
 	Transform floor;
-	public Transform ceiling;
+	[HideInInspector] public Transform ceiling;
 	Transform wallHolder;
 	Transform doorHolder;
+	[HideInInspector] public Transform decorationHolder;
+	[HideInInspector] public Transform pointHolder;
 
 	Vector3 rayDir = Vector3.zero;
 	Vector3 rayStart = Vector3.zero;
 	Quaternion doorRot;
 
+	[SerializeField] public bool settingUp = true;
+
 	public bool insideOffice = false;
 
-	int roomWidth = 0;
-	int roomLength = 0;
+	[HideInInspector] public int roomWidth = 0;
+	[HideInInspector] public int roomLength = 0;
 
 	[HideInInspector] public float timeAlive = 0.0f;
+
+	[HideInInspector] public GameObject clearBox;
 
 	List<GameObject> walls = new List<GameObject>();
 
 	void Awake()
 	{
-		GameObject wallHolderObj = new GameObject("WallHolder");
-		wallHolder = wallHolderObj.transform;
-		wallHolder.parent = transform;
-		wallHolder.position = transform.position;
-
-		GameObject doorHolderObj = new GameObject("DoorHolder");
-		doorHolder = doorHolderObj.transform;
-		doorHolder.parent = transform;
-		doorHolder.position = transform.position;
+		wallHolder = SpawnHolderObj("WallHolder");
+		doorHolder = SpawnHolderObj("DoorHolder");
+		pointHolder = SpawnHolderObj("PointHolder");
+		decorationHolder = SpawnHolderObj("DecorationHolder");
 
 		furthestPos.z = transform.position.z;
 
@@ -59,11 +61,29 @@ public class OfficeGenerator : MonoBehaviour
 		StartCoroutine(SetupRoom());
 	}
 
+	Transform SpawnHolderObj(string name)
+	{
+		GameObject holderObj = new GameObject(name);
+		Transform holder = holderObj.transform;
+		holder.parent = transform;
+		holder.position = transform.position;
+		return holder;
+	}
+
 	void FixedUpdate()
 	{
-		if(rigidbody)
+		if(Vector3.Distance(Player.singleton.instance.transform.position, transform.position) < 35.0f)
 		{
-			rigidbody.WakeUp();
+			wallHolder.gameObject.SetActive(true);
+
+			if(rigidbody)
+			{
+				rigidbody.WakeUp();
+			}
+		}
+		else if(!settingUp)
+		{
+			wallHolder.gameObject.SetActive(false);
 		}
 
 		timeAlive += Time.deltaTime;
@@ -133,11 +153,13 @@ public class OfficeGenerator : MonoBehaviour
 		}
 		averageWallPos *= 1.0f/walls.Count;
 
-		GameObject clearBox = GameObject.CreatePrimitive(PrimitiveType.Cube);
+		clearBox = GameObject.CreatePrimitive(PrimitiveType.Cube);
+		clearBox.name = "ClearBox";
+		Destroy( clearBox.GetComponent<MeshRenderer>());
 		clearBox.layer = LayerMask.NameToLayer("Ignore Raycast");
 		clearBox.transform.parent = transform;
 		clearBox.transform.position = averageWallPos;
-		clearBox.transform.localScale = new Vector3(roomSize.x, roomSize.y, 1);
+		clearBox.transform.localScale = new Vector3(roomSize.x, roomSize.y, 5.0f);
 
 		GameObject floorObj = WadeUtils.Instantiate(floorPrefab);
 		floor = floorObj.transform;
@@ -159,7 +181,7 @@ public class OfficeGenerator : MonoBehaviour
 			wall.collider.enabled = false;
 		}
 
-		boxCollider.enabled = false;
+		Destroy(boxCollider);
 
 		yield return new WaitForSeconds(0.5f);
 
@@ -168,7 +190,9 @@ public class OfficeGenerator : MonoBehaviour
 			wall.collider.enabled = true;
 		}
 
-		Destroy(clearBox);
+		yield return 0;
+
+		clearBox.collider.enabled = false;
 		Destroy(rigidbody);
 
 		MakeEntrances();
@@ -186,14 +210,12 @@ public class OfficeGenerator : MonoBehaviour
 		return officeWall;
 	}
 
-	void OnTriggerEnter(Collider col)
-	{
-		DestroyContents(col);
-	}
-
 	void OnTriggerStay(Collider col)
 	{
-		DestroyContents(col);
+		if(settingUp && !col.GetComponent<PatternMaker>())
+		{
+			DestroyContents(col);
+		}
 	}
 
 	void MakeEntrances()
@@ -208,13 +230,7 @@ public class OfficeGenerator : MonoBehaviour
 		}
 		rayStart.z = -0.0f;
 
-		GameObject currentOfficeObj = NetPathmakerManager.singleton.instance.worldManager.currentOffice;
-
-		OfficeGenerator currentOffice = null;
-		if(currentOfficeObj)
-		{
-			currentOffice = currentOfficeObj.GetComponent<OfficeGenerator>();
-		}
+		OfficeGenerator currentOffice = WorldManager.singleton.instance.currentOffice;
 
 		RaycastHit hit = WadeUtils.RaycastAndGetInfo(new Ray(rayStart, furthestDir), Mathf.Infinity);
 		if(hit.transform)
@@ -234,9 +250,20 @@ public class OfficeGenerator : MonoBehaviour
 				door.transform.localRotation *= Quaternion.Euler(0.0f, 0.0f, 180.0f);
 			}
 
-			door.GetComponent<FlipTilePoints>().office = gameObject;
+			Quaternion spawnRot = door.transform.rotation;
+			if(WorldManager.singleton.instance.officeMode)
+			{
+				spawnRot *= Quaternion.Euler(0.0f, 0.0f, 180.0f);
+			}
+			SpawnPatternMaker(door.transform.position - Vector3.forward, spawnRot);
+
+			door.GetComponent<FlipTilePoints>().office = this;
 
 			Destroy(hit.transform.gameObject);
+
+			settingUp = false;
+			clearBox.collider.enabled = true;
+			clearBox.GetComponent<BoxCollider>().size *= 0.9f;
 		}
 		
 		hit = WadeUtils.RaycastAndGetInfo(new Ray(rayStart, -furthestDir), Mathf.Infinity);
@@ -254,7 +281,7 @@ public class OfficeGenerator : MonoBehaviour
 				door.transform.localRotation *= Quaternion.Euler(0.0f, 0.0f, 180.0f);
 			}
 
-			door.GetComponent<FlipTilePoints>().office = gameObject;
+			door.GetComponent<FlipTilePoints>().office = this;
 
 			Destroy(hit.transform.gameObject);
 		}
@@ -283,6 +310,13 @@ public class OfficeGenerator : MonoBehaviour
 		{
 			Destroy(col.gameObject);
 		}
+	}
+
+	void SpawnPatternMaker(Vector3 pos, Quaternion rot)
+	{
+		GameObject patternMakerObj = WadeUtils.Instantiate(patternMakerPrefab, pos, rot);
+		patternMakerObj.transform.parent = transform;
+		patternMakerObj.GetComponent<PatternMaker>().Setup(this);
 	}
 
 	void OnCollisionEnter(Collision col)
@@ -321,10 +355,12 @@ public class OfficeGenerator : MonoBehaviour
 				}
 			}
 		}
-		else
-		{
+	}
 
-		}
+	public void DespawnPoints()
+	{
+		Destroy(pointHolder.gameObject);
+		pointHolder = SpawnHolderObj("PointHolder");
 	}
 
 	void OnDrawGizmos()

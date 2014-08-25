@@ -18,6 +18,9 @@ public class NetPathmaker : MonoBehaviour
 	float spawnChance = 0.0f;
 	NetPathmaker lastNetPathmaker;
 
+	[SerializeField] float spawnPointsChance = 0.05f;
+	[SerializeField] GameObject pointPrefab;
+
 	[SerializeField] GameObject officeGenPrefab;
 
 	void Awake()
@@ -55,22 +58,33 @@ public class NetPathmaker : MonoBehaviour
 		}
 	}
 
-	void SpawnPath()
+	GameObject SpawnPathChores()
 	{
 		GameObject pathObj = WadeUtils.Instantiate(pathPrefab);
 		pathObj.transform.parent = NetPathmakerManager.singleton.instance.internetTileHolder;
 		NetPathmakerManager.singleton.instance.internetTiles.Add(pathObj.transform);
 		pathObj.transform.rotation = transform.rotation;
+
+		if(Random.Range(0.0f, 1.0f) < spawnPointsChance)
+		{
+			GameObject pointObj = WadeUtils.Instantiate(pointPrefab);
+			pointObj.transform.parent = pathObj.transform.GetChild(0);
+			pointObj.transform.position = pathObj.transform.position + pathObj.transform.up * 0.55f;
+		}
+
+		return pathObj;
+	}
+
+	void SpawnPath()
+	{
+		GameObject pathObj = SpawnPathChores();
 		spawnedObjs.Add(pathObj);
 		pathObj.transform.position = transform.position - transform.up * pathPrefab.transform.localScale.z/2.0f; 
 	}
 
 	GameObject SpawnPath(Vector3 spawnPos)
 	{
-		GameObject pathObj = WadeUtils.Instantiate(pathPrefab);
-		pathObj.transform.parent = NetPathmakerManager.singleton.instance.internetTileHolder;
-		NetPathmakerManager.singleton.instance.internetTiles.Add(pathObj.transform);
-		pathObj.transform.rotation = transform.rotation;
+		GameObject pathObj = SpawnPathChores();
 		pathObj.transform.position = spawnPos - transform.up * pathPrefab.transform.localScale.z/2.0f; 
 		return pathObj;
 	}

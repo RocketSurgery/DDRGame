@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ScoreManager : MonoBehaviour {
+public class ScoreManager : MonoBehaviour 
+{
+	public static SingletonBehaviour<ScoreManager> singleton = new SingletonBehaviour<ScoreManager>();
 
     uint score = 0;
 

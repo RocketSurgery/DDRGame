@@ -22,7 +22,7 @@ public class InternetGround : MonoBehaviour
 			target = GameObject.Find("Player").transform;
 		}
 
-		defaultPos = transform.position;
+		defaultPos = transform.parent.position;
 		defaultHeight = transform.position.z;
 		defaultScale = transform.localScale;
 	}
