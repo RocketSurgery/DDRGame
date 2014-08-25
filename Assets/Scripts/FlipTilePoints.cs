@@ -3,6 +3,8 @@ using System.Collections;
 
 public class FlipTilePoints : JumpTilePoints
 {
+	public GameObject office;
+
 	GameObject worldManagerObject;
 	WorldManager worldManagerScript;
 
@@ -20,7 +22,24 @@ public class FlipTilePoints : JumpTilePoints
     {
         if (JumpTypeFromInput() == jump && (Time.time - lastTimeFlipWorld) > 1.0f) // Make it so the world doesn't flip back immediately
 		{
+			worldManagerScript.currentOffice = office;
 			worldManagerScript.FlipWorlds();
+
+			OfficeGenerator officeGenerator = office.GetComponent<OfficeGenerator>();
+
+			if(worldManagerScript.officeMode)
+			{
+				officeGenerator.ceiling.gameObject.SetActive(false);
+				officeGenerator.insideOffice = true;
+
+				transform.parent.parent.GetComponent<OfficeGenerator>().RespawnInternet(transform);
+			}
+			else
+			{
+				officeGenerator.ceiling.gameObject.SetActive(true);
+				officeGenerator.insideOffice = false;
+			}
+
             lastTimeFlipWorld = Time.time;
 			//Destroy(gameObject);
 		}
