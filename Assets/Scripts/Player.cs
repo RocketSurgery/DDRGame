@@ -5,7 +5,7 @@ public class Player : MonoBehaviour
 {
 	public static SingletonBehaviour<Player> singleton = new SingletonBehaviour<Player>();
 
-	[SerializeField] float moveSpeed;
+	public float moveSpeed;
 
 	[SerializeField] float hLineDistance = 0.2f;
 	[SerializeField] float vLineDistance = 1.0f;

@@ -449,6 +449,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 222c70905e7962c45b9925e698508991, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  score: 0
+  scorePerTile: 1
 --- !u!4 &252388481
 Transform:
   m_ObjectHideFlags: 0
@@ -2024,6 +2026,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   remainingTime: 20
   debug: 1
+  player: {fileID: 0}
+  endScreen: {fileID: 0}
+  endTextObject: {fileID: 0}
 --- !u!114 &1469485190
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2036,6 +2041,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 222c70905e7962c45b9925e698508991, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  score: 0
+  scorePerTile: 1
 --- !u!4 &1469485191
 Transform:
   m_ObjectHideFlags: 0

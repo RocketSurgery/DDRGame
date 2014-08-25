@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
@@ -15,6 +15,6 @@ public class ScoreText : MonoBehaviour
 
 	void Update ()
 	{
-		text.text = baseText + ScoreManager.singleton.instance.Score;
+		text.text = baseText + ScoreManager.singleton.instance.score;
 	}
 }
