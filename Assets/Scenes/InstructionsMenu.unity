@@ -1244,7 +1244,7 @@ RectTransform:
   m_AnchorMin: {x: .5, y: .5}
   m_AnchorMax: {x: .5, y: .5}
   m_AnchoredPosition: {x: 0, y: -331.709991}
-  m_SizeDelta: {x: 487.029999, y: 457}
+  m_SizeDelta: {x: 621.039978, y: 457}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &1188099440
 MonoBehaviour:
@@ -1271,10 +1271,14 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: The year is 2093. Super cool hackers fight back against the  corrupt government
+  m_Text: 'The year is 2093. Super cool hackers fight back against the  corrupt government
     by skating through the series of tubes that is the internet, breaking into government
     offices and leaking important documents. They must work fast and pick up hours
     on the internet to stay online for as long as possible.
+
+
+    This is intended to be a dance pad game with the arrows mapped to the keyboard
+    arrow keys. Feel free to play on the keyboard.'
 --- !u!222 &1188099441
 CanvasRenderer:
   m_ObjectHideFlags: 0
