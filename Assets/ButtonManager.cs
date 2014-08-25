@@ -15,6 +15,6 @@ public class ButtonManager : MonoBehaviour {
 
     public void GoToGamePlay()
     {
-        Application.LoadLevel("ChoreoTesting");
+        Application.LoadLevel("TheRealLevel");
     }
 }
