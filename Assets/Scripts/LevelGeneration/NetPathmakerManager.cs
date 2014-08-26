@@ -15,9 +15,7 @@ public class NetPathmakerManager : MonoBehaviour
 
 	void Awake()
 	{
-		singleton.DontDestroyElseKill(this);
-
-		player = GameObject.Find("Player").GetComponent<Player>();
+		player = Player.singleton.instance;
 	}
 
 	public void SpawnNetPathmaker(Vector3 position, Quaternion rotation)

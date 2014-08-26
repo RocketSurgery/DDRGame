@@ -15,6 +15,6 @@ public class TimeScript : MonoBehaviour
 
 	void Update()
 	{
-		text.text = baseText + TimeManager.singleton.instance.Time.ToString("f2");
+		text.text = baseText + TimeManager.singleton.instance.remainingTime.ToString("f2");
 	}
 }

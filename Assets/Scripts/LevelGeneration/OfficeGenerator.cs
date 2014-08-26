@@ -28,6 +28,8 @@ public class OfficeGenerator : MonoBehaviour
 	Vector3 rayStart = Vector3.zero;
 	Quaternion doorRot;
 
+	Transform player;
+
 	[SerializeField] public bool settingUp = true;
 
 	public bool insideOffice = false;
@@ -43,6 +45,7 @@ public class OfficeGenerator : MonoBehaviour
 
 	void Awake()
 	{
+		player = Player.singleton.instance.transform;
 		wallHolder = SpawnHolderObj("WallHolder");
 		doorHolder = SpawnHolderObj("DoorHolder");
 		pointHolder = SpawnHolderObj("PointHolder");
@@ -72,18 +75,24 @@ public class OfficeGenerator : MonoBehaviour
 
 	void FixedUpdate()
 	{
-		if(Vector3.Distance(Player.singleton.instance.transform.position, transform.position) < 35.0f)
+		if(Vector3.Distance(player.position, transform.position) < 35.0f || settingUp)
 		{
 			wallHolder.gameObject.SetActive(true);
+			doorHolder.gameObject.SetActive(true);
+			pointHolder.gameObject.SetActive(true);
+			decorationHolder.gameObject.SetActive(true);
 
 			if(rigidbody)
 			{
 				rigidbody.WakeUp();
 			}
 		}
-		else if(!settingUp)
+		else
 		{
 			wallHolder.gameObject.SetActive(false);
+			doorHolder.gameObject.SetActive(false);
+			pointHolder.gameObject.SetActive(false);
+			decorationHolder.gameObject.SetActive(false);
 		}
 
 		timeAlive += Time.deltaTime;
@@ -190,6 +199,8 @@ public class OfficeGenerator : MonoBehaviour
 			wall.collider.enabled = true;
 		}
 
+		//Debug.Break();
+
 		yield return 0;
 
 		clearBox.collider.enabled = false;
@@ -220,24 +231,12 @@ public class OfficeGenerator : MonoBehaviour
 
 	void MakeEntrances()
 	{
-		if(furthestDir == Vector3.right)
-		{
-			rayStart.x = transform.position.x;
-		}
-		else
-		{
-			rayStart.y = transform.position.y;
-		}
+		rayStart = transform.position;
 		rayStart.z = -0.0f;
-
-		OfficeGenerator currentOffice = WorldManager.singleton.instance.currentOffice;
 
 		RaycastHit hit = WadeUtils.RaycastAndGetInfo(new Ray(rayStart, furthestDir), Mathf.Infinity);
 		if(hit.transform)
 		{
-			// spawn entrance prefab
-			// aim it correctly
-
 			GameObject door = WadeUtils.Instantiate(doorPrefab);
 			door.transform.parent = doorHolder;
 			door.transform.position = hit.transform.position;
@@ -245,14 +244,10 @@ public class OfficeGenerator : MonoBehaviour
 			door.transform.rotation.SetFromToRotation(door.transform.up, door.transform.forward);
 			door.transform.localRotation *= Quaternion.Euler(90.0f, 0.0f, 180.0f);
 
-			if(currentOffice && currentOffice.insideOffice)
-			{
-				door.transform.localRotation *= Quaternion.Euler(0.0f, 0.0f, 180.0f);
-			}
-
 			Quaternion spawnRot = door.transform.rotation;
 			if(WorldManager.singleton.instance.officeMode)
 			{
+				//door.transform.localRotation *= Quaternion.Euler(0.0f, 0.0f, 180.0f);
 				spawnRot *= Quaternion.Euler(0.0f, 0.0f, 180.0f);
 			}
 			SpawnPatternMaker(door.transform.position - Vector3.forward, spawnRot);
@@ -260,8 +255,7 @@ public class OfficeGenerator : MonoBehaviour
 			door.GetComponent<FlipTilePoints>().office = this;
 
 			Destroy(hit.transform.gameObject);
-
-			settingUp = false;
+		
 			clearBox.collider.enabled = true;
 			clearBox.GetComponent<BoxCollider>().size *= 0.9f;
 		}
@@ -276,15 +270,17 @@ public class OfficeGenerator : MonoBehaviour
 			door.transform.rotation.SetFromToRotation(door.transform.up, door.transform.forward);
 			door.transform.localRotation *= Quaternion.Euler(-90.0f, 0.0f, 180.0f); 
 
-			if(currentOffice && currentOffice.insideOffice)
-			{
-				door.transform.localRotation *= Quaternion.Euler(0.0f, 0.0f, 180.0f);
-			}
+//			if(WorldManager.singleton.instance.officeMode)
+//			{
+//				door.transform.localRotation *= Quaternion.Euler(0.0f, 0.0f, 180.0f);
+//			}
 
 			door.GetComponent<FlipTilePoints>().office = this;
 
 			Destroy(hit.transform.gameObject);
 		}
+
+		settingUp = false;
 	}
 
 	void DestroyContents(Collider col)

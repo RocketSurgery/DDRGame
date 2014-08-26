@@ -19,7 +19,7 @@ public class InternetGround : MonoBehaviour
 	{
 		if(!target)
 		{
-			target = GameObject.Find("Player").transform;
+			target = Player.singleton.instance.transform;
 		}
 
 		defaultPos = transform.parent.position;
@@ -29,16 +29,19 @@ public class InternetGround : MonoBehaviour
 
 	void Update () 
 	{
-		float targetDistance = Vector3.Distance(target.position, defaultPos);
-		useMinHeight = defaultHeight - minHeight;
+		if(target && Vector3.Distance(target.position, transform.position) < 35.0f)
+		{
+			float targetDistance = Vector3.Distance(target.position, defaultPos);
+			useMinHeight = defaultHeight - minHeight;
 
-		targetDistance = (targetDistance - minDistance)/(maxDistance - minDistance);
+			targetDistance = (targetDistance - minDistance)/(maxDistance - minDistance);
 
-		transform.position = new Vector3(transform.position.x, 
-		                                 transform.position.y, 
-		                                 Mathf.Lerp(defaultHeight, useMinHeight, targetDistance));
+			transform.position = new Vector3(transform.position.x, 
+			                                 transform.position.y, 
+			                                 Mathf.Lerp(defaultHeight, useMinHeight, targetDistance));
 
-		transform.localScale = Vector3.Lerp( defaultScale, Vector3.zero, targetDistance);
+			transform.localScale = Vector3.Lerp( defaultScale, Vector3.zero, targetDistance);
+		}
 	}
 
 	void OnDrawGizmos()

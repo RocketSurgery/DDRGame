@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ButtonManager : MonoBehaviour {
-
+public class ButtonManager : MonoBehaviour 
+{
     public void GoToInstructions()
     {
         Application.LoadLevel("InstructionsMenu");

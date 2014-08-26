@@ -198,6 +198,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jump: 0
   sprite: {fileID: 0}
+  timeBonus: 3
 --- !u!114 &11400002
 MonoBehaviour:
   m_ObjectHideFlags: 1

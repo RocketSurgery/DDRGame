@@ -8,24 +8,30 @@ public class TimeManager : MonoBehaviour
 
 	public float remainingTime = 20.0f;
 	public bool debug = false;
-    public GameObject player;
     public GameObject endScreen;
     public GameObject endTextObject;
     public GameObject mainMenuButton;
+
+	float fadeTime = 2.5f;
 
 	void Update ()
 	{
 		remainingTime -= UnityEngine.Time.deltaTime;
 		if (!debug && remainingTime < 0.0f)
 		{
-            remainingTime = 0;
-            player.GetComponent<Player>().moveSpeed = 0;
+			remainingTime = 0;
 
-            GameObject[] playerStuff = GameObject.FindGameObjectsWithTag("Player");
+			Player player = Player.singleton.instance;
+            player.moveSpeed = 0;
 
-            foreach (GameObject go in playerStuff)
+			StartCoroutine(FadeSong());
+
+			Camera.main.cullingMask = 0;
+            Renderer[] playerRenderers = player.GetComponentsInChildren<Renderer>();
+
+            foreach (Renderer go in playerRenderers)
             {
-                go.SetActive(false);
+				go.enabled = false;
             }
 
             endScreen.SetActive(true);
@@ -38,16 +44,22 @@ public class TimeManager : MonoBehaviour
 		}
 	}
 
+	IEnumerator FadeSong()
+	{
+		AudioSource song = WorldManager.singleton.instance.backgroundMusic;
+		float startVolume = song.volume;
+
+		float fadeTimer = 0.0f;
+		while(fadeTimer <= fadeTime)
+		{
+			song.volume = Mathf.Lerp(startVolume, 0.0f, fadeTimer/fadeTime);
+			fadeTimer += Time.deltaTime;
+			yield return 0;
+		}
+	}
+
 	public void AddTime(float time)
 	{
 		remainingTime += time;
-	}
-
-	public float Time
-	{
-		get
-		{
-			return remainingTime;
-		}
 	}
 }

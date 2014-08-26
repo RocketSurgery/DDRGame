@@ -5,8 +5,8 @@ public class WorldManager : MonoBehaviour
 {
 	public static SingletonBehaviour<WorldManager> singleton = new SingletonBehaviour<WorldManager>();
 
-	public GameObject world1;
-	public GameObject world2;
+//	public GameObject world1;
+//	public GameObject world2;
 	public GameObject playerModel1;
 	public GameObject playerModel2;
 
@@ -20,10 +20,13 @@ public class WorldManager : MonoBehaviour
 
 	[HideInInspector] public OfficeGenerator currentOffice;
 
-    void Start()
-    {
-		allCameraLayers = Camera.main.cullingMask;
+	public AudioSource backgroundMusic;
 
+    void Awake()
+    {
+		backgroundMusic = SoundManager.singleton.instance.Play2DSong("FloppyDrift", 1.0f, true);
+
+		allCameraLayers = Camera.main.cullingMask;
 		currentOffice = null;
 
 		governmentItems = GameObject.FindGameObjectsWithTag("GovernmentStuff");
@@ -37,6 +40,8 @@ public class WorldManager : MonoBehaviour
 	{
 		if(!officeMode)
 		{
+			backgroundMusic.volume = 0.2f;
+
 			foreach(OfficeGenerator officeGenerator in NetPathmakerManager.singleton.instance.officeHolder.GetComponentsInChildren<OfficeGenerator>())
 			{
 				if(officeGenerator != currentOffice)
@@ -50,6 +55,8 @@ public class WorldManager : MonoBehaviour
 		}
 		else
 		{
+			backgroundMusic.volume = 1.0f;
+
 			currentOffice.DespawnPoints();
 			Camera.main.cullingMask = allCameraLayers;
 		}

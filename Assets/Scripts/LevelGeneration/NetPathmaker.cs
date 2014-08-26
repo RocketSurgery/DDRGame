@@ -68,7 +68,7 @@ public class NetPathmaker : MonoBehaviour
 		if(Random.Range(0.0f, 1.0f) < spawnPointsChance)
 		{
 			GameObject pointObj = WadeUtils.Instantiate(pointPrefab);
-			pointObj.transform.parent = pathObj.transform.GetChild(0);
+			pointObj.transform.parent = pathObj.transform;
 			pointObj.transform.position = pathObj.transform.position + pathObj.transform.up * 0.55f;
 		}
 

@@ -33,10 +33,15 @@ public class SoundManager : MonoBehaviour
     Dictionary<string, AudioClip> soundList = new Dictionary<string, AudioClip>();
     Dictionary<string, AudioClip> songList = new Dictionary<string, AudioClip>();
 
+	[SerializeField] bool destroyOnLoad;
+
     // Use this for initialization
     void Awake()
     {
-        singleton.DontDestroyElseKill(this);
+		if(!destroyOnLoad)
+		{
+        	singleton.DontDestroyElseKill(this);
+		}
 
         // Setup dictionaries
         foreach (AudioClip clip in sounds)
@@ -48,8 +53,6 @@ public class SoundManager : MonoBehaviour
         //Set up AudioSource pools
         SetupSounderPool();
         SetupSongerPool();
-
-        DontDestroyOnLoad(gameObject);
     }
 
     void SetupSounderPool()
@@ -65,7 +68,7 @@ public class SoundManager : MonoBehaviour
         for (int i = 0; i < soundPoolSize; i++)
         {
             sounders[i] = new GameObject("Sounder" + i);
-            sounders[i].AddComponent("AudioSource");
+            sounders[i].AddComponent<AudioSource>();
             sounders[i].GetComponent<AudioSource>().playOnAwake = false;
             sounders[i].transform.parent = sounderHolder.transform;
         }
@@ -84,7 +87,7 @@ public class SoundManager : MonoBehaviour
         for (int i = 0; i < songPoolSize; i++)
         {
             songers[i] = new GameObject("Songer" + i);
-            songers[i].AddComponent("AudioSource");
+            songers[i].AddComponent<AudioSource>();
             songers[i].GetComponent<AudioSource>().playOnAwake = false;
             songers[i].transform.parent = songerHolder.transform;
         }

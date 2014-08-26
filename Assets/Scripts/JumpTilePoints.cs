@@ -16,7 +16,7 @@ public class JumpTilePoints : ChoreoTilePoints
 {
 	public JumpTypes jump;
 	public SpriteRenderer sprite;
-	public static new float timeBonus = 1.0f;
+	[SerializeField] float timeBonus = 1.0f;
 
 	protected override void Start()
 	{
